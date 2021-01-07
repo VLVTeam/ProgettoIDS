@@ -4,6 +4,9 @@
 package it.unicam.progettoc3;
 
 import org.junit.jupiter.api.Test;
+
+import it.unicam.progettoc3.vlv.App;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class AppTest {

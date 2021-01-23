@@ -1,4 +1,4 @@
-package it.unicam.progettoc3.vlv.enumeratori;
+package it.unicam.progettoc3.vlv.entity.enumeratori;
 
 public enum CategorieMerceologiche {
 	ELETTRONICA,

@@ -1,9 +1,9 @@
-package it.unicam.progettoc3.vlv.gestori;
+package it.unicam.progettoc3.vlv.entity.gestori;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import it.unicam.progettoc3.vlv.elementi.PuntoDiRitiro;
+import it.unicam.progettoc3.vlv.entity.elementi.PuntoDiRitiro;
 
 
 public class GestorePuntiDiRitiro implements IGestorePuntiDiRitiro {

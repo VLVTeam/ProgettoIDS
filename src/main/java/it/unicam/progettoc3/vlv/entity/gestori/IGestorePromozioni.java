@@ -1,9 +1,9 @@
-package it.unicam.progettoc3.vlv.gestori;
+package it.unicam.progettoc3.vlv.entity.gestori;
 
 import java.util.List;
 import java.util.function.Predicate;
 
-import it.unicam.progettoc3.vlv.elementi.Promozione;
+import it.unicam.progettoc3.vlv.entity.elementi.Promozione;
 
 public interface IGestorePromozioni {
 

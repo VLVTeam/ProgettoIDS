@@ -1,6 +1,6 @@
-package it.unicam.progettoc3.vlv.gestori;
+package it.unicam.progettoc3.vlv.entity.gestori;
 
-import it.unicam.progettoc3.vlv.elementi.PuntoDiRitiro;
+import it.unicam.progettoc3.vlv.entity.elementi.PuntoDiRitiro;
 
 public interface IGestorePuntiDiRitiro {
 

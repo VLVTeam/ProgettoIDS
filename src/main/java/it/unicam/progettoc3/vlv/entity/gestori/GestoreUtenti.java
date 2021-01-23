@@ -1,14 +1,16 @@
-package it.unicam.progettoc3.vlv.gestori;
+package it.unicam.progettoc3.vlv.entity.gestori;
 
 
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
-import it.unicam.progettoc3.vlv.utenti.Amministratore;
-import it.unicam.progettoc3.vlv.utenti.Cliente;
-import it.unicam.progettoc3.vlv.utenti.Commerciante;
-import it.unicam.progettoc3.vlv.utenti.Corriere;
+import it.unicam.progettoc3.vlv.entity.utenti.Amministratore;
+import it.unicam.progettoc3.vlv.entity.utenti.Cliente;
+import it.unicam.progettoc3.vlv.entity.utenti.Commerciante;
+import it.unicam.progettoc3.vlv.entity.utenti.Corriere;
 
 public class GestoreUtenti implements IGestoreUtenti{
 	
@@ -74,7 +76,12 @@ public class GestoreUtenti implements IGestoreUtenti{
 		if(!corrieri.contains(corriere)){corrieri.add(corriere);}
 		else{System.out.println("Corriere gia presente");}
 	}
-
 	
+	@Override
+	public List<Commerciante> filtraPuntiVendita(Predicate<Commerciante> p)
+	{
+		return commercianti.stream().filter(p).collect(Collectors.toList());
+		//return commercianti.stream().filter(p).collect(Collectors.<Promozione>toList());
+	}
 
 }

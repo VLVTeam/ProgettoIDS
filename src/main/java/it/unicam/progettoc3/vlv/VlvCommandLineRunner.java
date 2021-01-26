@@ -17,7 +17,11 @@ public class VlvCommandLineRunner implements CommandLineRunner{
 	@Override
 	public void run(String... args) throws Exception {
 		// TODO Auto-generated method stub
+		if(!repository.findById(1L).isPresent())
+		{
+		
 		repository.save( new Amministratore( "Mario", "Rossi"));
+		}
 	}
 	
 }

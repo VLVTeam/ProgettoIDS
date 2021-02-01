@@ -4,6 +4,7 @@ import java.util.List;
 
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import it.unicam.progettoc3.vlv.entity.enumeratori.CategorieMerceologiche;
@@ -15,15 +16,15 @@ public interface IUtenti {
 	
 	
 	
-	public ResponseEntity<String> setStatoIscrizioneCommerciante(@RequestParam Commerciante commerciante,  @RequestParam boolean stato);
+	public ResponseEntity<String> setStatoIscrizioneCommerciante(@RequestParam Long  idCommerciante,  @RequestParam boolean stato);
 	
-	public ResponseEntity<String> setStatoIscrizioneCorriere(@RequestParam Corriere corriere, @RequestParam boolean stato);
+	public ResponseEntity<String> setStatoIscrizioneCorriere(@RequestParam Long idCorriere, @RequestParam boolean stato);
 	
-	public ResponseEntity<String> addCommerciante(@RequestParam Commerciante commerciante);
+	public ResponseEntity<String> addCommerciante(@RequestBody Commerciante commerciante);
 	
-	public ResponseEntity<String> addCliente(@RequestParam Cliente cliente);
+	public ResponseEntity<String> addCliente(@RequestBody Cliente cliente);
 	
-	public ResponseEntity<String> addCorriere(@RequestParam Corriere corriere);
+	public ResponseEntity<String> addCorriere(@RequestBody Corriere corriere);
 	
 	public List<Commerciante> getPuntiVenditaFiltrati(@RequestParam CategorieMerceologiche categoriaMerceologica);
 	

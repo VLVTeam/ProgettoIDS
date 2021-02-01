@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -22,16 +23,34 @@ private Long ID;
 @NotBlank
 private String nome;
 
+@Column(nullable = false )
+@NotNull
+@NotBlank
+private String password;
+
+
+
+
+
+@Column(nullable = false , unique=true )
+@NotNull
+@NotBlank
+@Email
+private String email;
+
+
 @Column(nullable = false)
 @NotNull
 @NotBlank
 private String cognome;
 
 public Amministratore(){}
-public Amministratore( String nome, String cognome) {
+public Amministratore( String nome, String cognome , String email , String password) {
 	
 	this.nome = nome;
 	this.cognome = cognome;
+	this.email=email;
+	this.password=password;
 }
 
 public Long getID() {
@@ -49,6 +68,13 @@ public String getCognome() {
 	return cognome;
 }
 
+public String getPassword() {
+	return password;
+}
 
 
+
+public String getEmail() {
+	return email;
+}
 }

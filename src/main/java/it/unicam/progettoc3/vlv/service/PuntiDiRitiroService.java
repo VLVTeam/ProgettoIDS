@@ -2,6 +2,7 @@ package it.unicam.progettoc3.vlv.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import it.unicam.progettoc3.vlv.controller.IPuntiDiRitiro;
 import it.unicam.progettoc3.vlv.entity.elementi.PuntoDiRitiro;
-import it.unicam.progettoc3.vlv.entity.elementi.PuntoDiRitiroRepository;
+import it.unicam.progettoc3.vlv.repository.PuntoDiRitiroRepository;
 
 @Service
 public class PuntiDiRitiroService implements IPuntiDiRitiro {
@@ -20,33 +21,28 @@ public class PuntiDiRitiroService implements IPuntiDiRitiro {
 	@Override
 	public ResponseEntity<String> addPuntoDiRitiro(PuntoDiRitiro puntoDiRitiro) {
 		// TODO Auto-generated method stub
-		try {
+		
 			puntoDiRitiroRepository.save(puntoDiRitiro);
 			return new ResponseEntity<String>("PUNTO DI RITIRO  AGGIUNTO" , HttpStatus.OK);
-		} catch (IllegalArgumentException e) {
-			// TODO: handle exception
-			return new ResponseEntity<String>("CONTROLLARE CAMPI PUNTO DI RITIRO" , HttpStatus.NOT_ACCEPTABLE);
-		}
+		
 	}
 
 	@Override
-	public ResponseEntity<String> removePuntoDiRitiro(PuntoDiRitiro puntoDiRitiro) {
+	public ResponseEntity<String> removePuntoDiRitiro(Long idPuntoDiRitiro) {
 		// TODO Auto-generated method stub
-		List<PuntoDiRitiro> puntiDiRitiro= new ArrayList<>();
-		puntiDiRitiro = getPuntiDiRitiro();
-		if(puntiDiRitiro.isEmpty())
+		Optional<PuntoDiRitiro> optionalPuntoDiRitiro= puntoDiRitiroRepository.findById(idPuntoDiRitiro);
+		
+		
+		if(!optionalPuntoDiRitiro.isPresent())
 		{
 			return new ResponseEntity<String>("PUNTO DI RITIRO NON TROVATO , Impossibile rimuovere" , HttpStatus.NOT_ACCEPTABLE);
 		}
-		else if(puntiDiRitiro.contains(puntoDiRitiro))
+		else 
 		{
-			puntiDiRitiro.remove(puntoDiRitiro.getID());
+			puntoDiRitiroRepository.deleteById(idPuntoDiRitiro);
 			return new ResponseEntity<String>("PUNTO DI RITIRO RIMOSSO" , HttpStatus.OK);
 		}
-		else
-		{
-			return new ResponseEntity<String>("PUNTO DI RITIRO NON TROVATO , Impossibile rimuovere" , HttpStatus.NOT_ACCEPTABLE);
-		}
+		
 	}
 
 	@Override

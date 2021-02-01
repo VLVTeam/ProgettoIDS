@@ -1,6 +1,6 @@
 package it.unicam.progettoc3.vlv.entity.enumeratori;
 
-public enum StatoOrdine {
+public enum StatiOrdine {
 	
 	IN_ACCETTAZIONE,
 	IN_RITIRO,

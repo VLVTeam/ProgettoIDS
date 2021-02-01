@@ -7,6 +7,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -19,9 +20,8 @@ public class Commerciante {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long ID;
 	
-	@NotBlank
-	@NotNull
-	@Column(nullable = false)
+	
+	
 	@Enumerated(EnumType.STRING)
 	private CategorieMerceologiche categoriaMerceologica;
 	
@@ -36,21 +36,49 @@ public class Commerciante {
 	private String nomePuntoVendita;
 	
 	
-	private boolean statoIscrizione;
+	
+private boolean statoIscrizione;
+
+	
+	
+	@Column(nullable = false )
+	@NotNull
+	@NotBlank
+	private String password;
+
+
+
+
+
+	@Column(nullable = false , unique=true )
+	@NotNull
+	@NotBlank
+	@Email
+	private String email;
+	
 	
 	
 	public Commerciante(){}
-	public Commerciante(CategorieMerceologiche categoriaMerceologica, String indirizzoPuntoVendita,
-			String nomePuntoVendita) {
-		
+	public Commerciante(CategorieMerceologiche categoriaMerceologica, String indirizzoPuntoVendita,String nomePuntoVendita , String email , String password) {
 		
 		this.categoriaMerceologica = categoriaMerceologica;
 		this.indirizzoPuntoVendita = indirizzoPuntoVendita;
 		this.nomePuntoVendita = nomePuntoVendita;
 		this.statoIscrizione = false;
+		this.email=email;
+		this.password=password;
+
 	}
 
-
+	
+	public String getPassword() {
+		return password;
+	}
+	
+	public String getEmail() {
+		return email;
+	}
+	
 	public Long getID() {
 		return ID;
 	}
@@ -79,19 +107,15 @@ public class Commerciante {
 	public String getNomePuntoVendita() {
 		return nomePuntoVendita;
 	}
-
-
-
 	public boolean isStatoIscrizione() {
 		return statoIscrizione;
 	}
-
-
 	public void setStatoIscrizione(boolean statoIscrizione) {
 		this.statoIscrizione = statoIscrizione;
 	}
-	
-	
+
+
+
 	
 	
 	

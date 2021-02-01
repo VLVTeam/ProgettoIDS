@@ -6,7 +6,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import it.unicam.progettoc3.vlv.entity.enumeratori.CategorieMerceologiche;
@@ -16,49 +20,52 @@ import it.unicam.progettoc3.vlv.entity.utenti.Corriere;
 import it.unicam.progettoc3.vlv.service.UtentiService;
 
 @RestController
+@RequestMapping("/gestoreUtenti")
 public class UtentiController implements IUtenti {
 	
 	@Autowired
 	UtentiService utentiService;
 
-	@GetMapping(value ="/setStatoIscrizioneCommerciante")
+	@PutMapping(value ="/setStatoIscrizioneCommerciante")
 	@Override
-	public ResponseEntity<String> setStatoIscrizioneCommerciante(Commerciante commerciante, boolean stato) {
+	public ResponseEntity<String> setStatoIscrizioneCommerciante(@RequestParam Long idCommerciante, @RequestParam boolean stato) {
 		// TODO Auto-generated method stub
-		return utentiService.setStatoIscrizioneCommerciante(commerciante, stato);
+		return utentiService.setStatoIscrizioneCommerciante( idCommerciante, stato);
 	}
 	
-	@GetMapping(value ="/setStatoIscrizioneCorriere")
+	@PutMapping(value ="/setStatoIscrizioneCorriere")
 	@Override
-	public ResponseEntity<String> setStatoIscrizioneCorriere(Corriere corriere, boolean stato) {
+	public ResponseEntity<String> setStatoIscrizioneCorriere(@RequestParam Long idCorriere, @RequestParam boolean stato) {
 		// TODO Auto-generated method stub
-		return utentiService.setStatoIscrizioneCorriere(corriere, stato);
+		return utentiService.setStatoIscrizioneCorriere(idCorriere, stato);
 	}
 	
-	@PutMapping(value ="/addCommerciante")
+	
+	
+	@PostMapping(value ="/addCommerciante")
 	@Override
-	public ResponseEntity<String> addCommerciante(Commerciante commerciante) {
+	public ResponseEntity<String> addCommerciante(@RequestBody Commerciante commerciante) {
 		// TODO Auto-generated method stub
 		return utentiService.addCommerciante(commerciante);
 	}
 
-	@PutMapping(value ="/addCliente")
+	@PostMapping( value ="/addCliente")
 	@Override
-	public ResponseEntity<String> addCliente(Cliente cliente) {
+	public ResponseEntity<String> addCliente(@RequestBody Cliente cliente) {
 		// TODO Auto-generated method stub
 		return utentiService.addCliente(cliente);
 	}
 
-	@PutMapping(value ="/addCorriere")
+	@PostMapping(value ="/addCorriere")
 	@Override
-	public ResponseEntity<String> addCorriere(Corriere corriere) {
+	public ResponseEntity<String> addCorriere(@RequestBody Corriere corriere) {
 		// TODO Auto-generated method stub
 		return utentiService.addCorriere(corriere);
 	}
 
 	@GetMapping(value="/getPuntiVenditaFiltrati")
 	@Override
-	public List<Commerciante> getPuntiVenditaFiltrati(CategorieMerceologiche categoriaMerceologica) {
+	public List<Commerciante> getPuntiVenditaFiltrati(@RequestParam CategorieMerceologiche categoriaMerceologica) {
 		// TODO Auto-generated method stub
 		return utentiService.getPuntiVenditaFiltrati(categoriaMerceologica);
 	}

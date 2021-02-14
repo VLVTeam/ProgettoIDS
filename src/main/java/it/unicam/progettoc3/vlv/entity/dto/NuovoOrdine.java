@@ -1,19 +1,19 @@
-package it.unicam.progettoc3.vlv.entity.riferimenti;
-
-import java.util.Date;
+package it.unicam.progettoc3.vlv.entity.dto;
 
 
 
-import it.unicam.progettoc3.vlv.entity.enumeratori.StatiOrdine;
 
 
-public class OrdineRiferimento{
+
+
+
+public class NuovoOrdine{
 
 	
 
 
 
-	private Long ID;
+	//private Long ID;
 
 	
 	private String codiceRitiro;
@@ -21,13 +21,13 @@ public class OrdineRiferimento{
 	private String descrizione;
 
 
-	private StatiOrdine stato;
+	//private StatiOrdine stato;
 
-	private Long idCommerciante;
+	
 
 	private Long idCliente;
 	
-	private Long idCorriere;
+	//private Long idCorriere;
 
 	
 	private Long idPuntoDiRitiro;
@@ -37,29 +37,29 @@ public class OrdineRiferimento{
 	
 
 	
-	private Date dataCreazione;
+	//private Date dataCreazione;
 
 	
-	private Date dataRitiro;
+	//private Date dataRitiro;
 
 	
-	private Date dataConsegnaPrevista;
+	//private Date dataConsegnaPrevista;
 	
 	
 	
 	
 	
-	public OrdineRiferimento() {
+	public NuovoOrdine() {
 		// TODO Auto-generated constructor stub
 	}
 /*
-	public OrdineRiferimento(String codiceRitiro, String descrizione,StatiOrdine stato, Long idCommerciante, Long idCliente,  Long idPuntoDiRitiro ) {
+	public OrdineRiferimento(String codiceRitiro, String descrizione,StatiOrdine stato,  Long idCliente,  Long idPuntoDiRitiro ) {
 		// TODO Auto-generated constructor stub
 		
 		this.codiceRitiro=codiceRitiro;
 		this.descrizione=descrizione;
 		this.stato=stato;
-		this.idCommerciante=idCommerciante;
+		
 		this.idCliente=idCliente;
 		this.idCorriere=null;
 		this.idPuntoDiRitiro=idPuntoDiRitiro;
@@ -69,13 +69,12 @@ public class OrdineRiferimento{
 	}
 
 	
-	public OrdineRiferimento(String codiceRitiro, String descrizione,StatiOrdine stato, Long idCommerciante, Long idCliente ) {
+	public OrdineRiferimento(String codiceRitiro, String descrizione,StatiOrdine stato, Long idCliente ) {
 		// TODO Auto-generated constructor stub
 		
 		this.codiceRitiro=codiceRitiro;
 		this.descrizione=descrizione;
 		this.stato=stato;
-		this.idCommerciante=idCommerciante;
 		this.idCliente=idCliente;
 		this.idCorriere=null;
 		this.idPuntoDiRitiro=null;
@@ -85,13 +84,14 @@ public class OrdineRiferimento{
 	}
 	
 	*/
-	public OrdineRiferimento(Long id ,String codiceRitiro, String descrizione,StatiOrdine stato, Long idCommerciante, Long idCliente, Long idCorriere,  Long idPuntoDiRitiro,Date dataCreazione ,Date dataRitiro , Date dataConsegnaPrevista ) {
+	/*
+	public OrdineRiferimento(Long id ,String codiceRitiro, String descrizione,StatiOrdine stato,  Long idCliente, Long idCorriere,  Long idPuntoDiRitiro,Date dataCreazione ,Date dataRitiro , Date dataConsegnaPrevista ) {
 		// TODO Auto-generated constructor stub
 		this.ID=id;
 		this.codiceRitiro=codiceRitiro;
 		this.descrizione=descrizione;
 		this.stato=stato;
-		this.idCommerciante=idCommerciante;
+		
 		this.idCliente=idCliente;
 		this.idCorriere=idCorriere;
 		this.idPuntoDiRitiro=idPuntoDiRitiro;
@@ -99,11 +99,12 @@ public class OrdineRiferimento{
 		this.dataRitiro=dataRitiro;
 		this.dataConsegnaPrevista=dataConsegnaPrevista;
 	}
-
+*/
+	/*
 	public Long getID() {
 		return ID;
 	}
-
+*/
 	public String getCodiceRitiro() {
 		return codiceRitiro;
 	}
@@ -112,26 +113,24 @@ public class OrdineRiferimento{
 		return descrizione;
 	}
 
-	public Long getIdCommerciante() {
-		return idCommerciante;
-	}
 
+/*
 	public Long getIdCorriere() {
 		return idCorriere;
 	}
-
+*/
 	public Long getIdPuntoDiRitiro() {
 		return idPuntoDiRitiro;
 	}
-
+/*
 	public StatiOrdine getStato() {
 		return stato;
 	}
-
+*/
 	public Long getIdCliente() {
 		return idCliente;
 	}
-
+/*
 	public Date getDataCreazione() {
 		return dataCreazione;
 	}
@@ -144,6 +143,6 @@ public class OrdineRiferimento{
 		return dataConsegnaPrevista;
 	}
 
-	
+	*/
 	
 }

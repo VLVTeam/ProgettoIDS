@@ -33,7 +33,7 @@ private Long ID;
 private String descrizione;
 
 @JsonBackReference
-@ManyToOne( fetch = FetchType.EAGER, cascade = CascadeType.ALL , optional = false)
+@ManyToOne( fetch = FetchType.LAZY, cascade = CascadeType.ALL , optional = false )
 @NotNull
 private Commerciante commerciante;
 
@@ -95,6 +95,15 @@ public void setDataFine(Date dataFine) {
 }
 
 
+public Long getIdCommerciante(){
+	return commerciante.getId();
+}
+public void setID(Long iD) {
+	ID = iD;
+}
+public void setCommerciante(Commerciante commerciante) {
+	this.commerciante = commerciante;
+}
 
 
 

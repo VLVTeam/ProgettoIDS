@@ -1,64 +1,60 @@
 package it.unicam.progettoc3.vlv.entity.utenti;
 
+
+import java.util.List;
+
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
+import javax.persistence.FetchType;
+
+import javax.persistence.OneToMany;
+
 import javax.validation.constraints.NotNull;
+
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import it.unicam.progettoc3.vlv.entity.elementi.Ordine;
 
 
 
 @Entity
-public class Corriere {
+public class Corriere extends Ruolo  {
 
-@Id
-@GeneratedValue(strategy = GenerationType.IDENTITY)
-private Long ID;
+
 
 @Column(nullable = false)
 @NotNull
-@NotBlank
 private String nomeDitta;
 
 
 
 
 
-@Column(nullable = false )
-@NotNull
-@NotBlank
-private String password;
 
 
 
 
-@Column(nullable = false , unique=true )
-@NotNull
-@NotBlank
-@Email
-private String email;
 
 
-private boolean statoIscrizione;
+@JsonManagedReference(value="corriere-ordine")
+@OneToMany(fetch = FetchType.LAZY ,  cascade = CascadeType.ALL , mappedBy="corriere")
+List<Ordine> ordini ;
 
+public Corriere(){	}
 
-public Corriere(){}
-
-public Corriere( String nomeDitta ,String email , String password) {
+public Corriere( @NotNull String nomeDitta ) {
 	
 	this.nomeDitta = nomeDitta;
-	this.statoIscrizione=false;
-	this.email=email;
-	this.password=password;
+	
 
 }
 
-public Long getID() {
-	return ID;
-}
+
+
+
 
 
 public String getNomeDitta() {
@@ -66,22 +62,25 @@ public String getNomeDitta() {
 }
 
 
-public String getPassword() {
-	return password;
+
+
+
+
+
+
+public void setNomeDitta(String nomeDitta) {
+	this.nomeDitta = nomeDitta;
 }
 
-public String getEmail() {
-	return email;
+
+
+public List<Ordine> getOrdini() {
+	return ordini;
 }
 
-public boolean isStatoIscrizione() {
-	return statoIscrizione;
+public void setOrdini(List<Ordine> ordini) {
+	this.ordini = ordini;
 }
-
-public void setStatoIscrizione(boolean statoIscrizione) {
-	this.statoIscrizione = statoIscrizione;
-}
-
 
 
 

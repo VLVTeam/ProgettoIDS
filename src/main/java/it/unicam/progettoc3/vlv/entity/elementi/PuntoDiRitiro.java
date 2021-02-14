@@ -1,13 +1,21 @@
 package it.unicam.progettoc3.vlv.entity.elementi;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity(name = "punto_di_ritiro")
 @Table(name = "punto_di_ritiro")
@@ -21,6 +29,12 @@ private Long ID;
 @NotNull
 @Column(nullable = false)
 private String indirizzo;
+
+@JsonIgnore
+@JsonManagedReference(value="punto-ordine")
+@OneToMany(fetch = FetchType.LAZY ,  cascade = CascadeType.ALL , mappedBy="puntoDiRitiro" , orphanRemoval = true)
+List<Ordine> ordini ;
+
 
 public PuntoDiRitiro(){}
 public PuntoDiRitiro(String indirizzo) {
@@ -38,6 +52,21 @@ public Long getID() {
 
 public String getIndirizzo() {
 	return indirizzo;
+}
+
+@JsonIgnore
+public List<Ordine> getOrdini() {
+	return ordini;
+}
+
+public void setOrdini(List<Ordine> ordini) {
+	this.ordini = ordini;
+}
+public void setID(Long iD) {
+	ID = iD;
+}
+public void setIndirizzo(String indirizzo) {
+	this.indirizzo = indirizzo;
 }
 
 

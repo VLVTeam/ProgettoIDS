@@ -1,11 +1,11 @@
-package it.unicam.progettoc3.vlv.entity.riferimenti;
+package it.unicam.progettoc3.vlv.entity.dto;
 
 import java.util.Date;
 
 
-public class PromozioneRiferimento {
+public class NuovaPromozione {
 	
-	private Long id;
+	//private Long id;
 
 	
 	private String descrizione;
@@ -16,36 +16,36 @@ public class PromozioneRiferimento {
 	
 	private Date dataFine;
 	
-	private Long idCommerciante;
 	
-	public PromozioneRiferimento() {
+	
+	public NuovaPromozione() {
 		// TODO Auto-generated constructor stub
 	}
 	/*
-	public PromozioneRiferimento(String descrizione, Long idCommerciante, Date dataInizio, Date dataFine) {
+	public PromozioneRiferimento(String descrizione, Date dataInizio, Date dataFine) {
 		// TODO Auto-generated constructor stub
 		this.descrizione=descrizione;
-		this.idCommerciante=idCommerciante;
+		
 		this.dataInizio=dataInizio;
 		this.dataFine=dataFine;
 	}
 */
-	public PromozioneRiferimento(Long id ,String descrizione, Long idCommerciante, Date dataInizio, Date dataFine) {
+	/*
+	public PromozioneRiferimento(Long id ,String descrizione, Date dataInizio, Date dataFine) {
 		// TODO Auto-generated constructor stub
 		this.id=id;
 		this.descrizione=descrizione;
-		this.idCommerciante=idCommerciante;
+		
 		this.dataInizio=dataInizio;
 		this.dataFine=dataFine;
 	}
 
-	public Long getIdCommerciante() {
-		return idCommerciante;
-	}
-
+	*/
+/*
 	public Long getId() {
 		return id;
 	}
+	*/
 
 	public String getDescrizione() {
 		return descrizione;

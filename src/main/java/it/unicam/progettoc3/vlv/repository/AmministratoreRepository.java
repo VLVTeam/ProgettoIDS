@@ -1,9 +1,13 @@
 package it.unicam.progettoc3.vlv.repository;
 
-import org.springframework.data.repository.CrudRepository;
+
+
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import it.unicam.progettoc3.vlv.entity.utenti.Amministratore;
 
-public interface AmministratoreRepository extends CrudRepository<Amministratore, Long>{
-	 public boolean existsByEmail(String email);
+public interface AmministratoreRepository extends JpaRepository<Amministratore, Long> {
+
+	
+	
 }

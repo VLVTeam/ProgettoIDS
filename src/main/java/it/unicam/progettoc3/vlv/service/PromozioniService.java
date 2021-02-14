@@ -5,33 +5,37 @@ package it.unicam.progettoc3.vlv.service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
+
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 
-import it.unicam.progettoc3.vlv.controller.IPromozioni;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import it.unicam.progettoc3.vlv.entity.dto.NuovaPromozione;
 import it.unicam.progettoc3.vlv.entity.elementi.Promozione;
 import it.unicam.progettoc3.vlv.entity.enumeratori.CategorieMerceologiche;
-import it.unicam.progettoc3.vlv.entity.riferimenti.PromozioneRiferimento;
 import it.unicam.progettoc3.vlv.entity.utenti.Commerciante;
+import it.unicam.progettoc3.vlv.entity.utenti.Utente;
 import it.unicam.progettoc3.vlv.repository.CommercianteRepository;
 import it.unicam.progettoc3.vlv.repository.PromozioneRepository;
+import it.unicam.progettoc3.vlv.repository.UtenteRepository;
+import javassist.NotFoundException;
 
 @Service
-public class PromozioniService implements IPromozioni {
+@Transactional
+public class PromozioniService {
 
 	@Autowired
 	PromozioneRepository promozioneRepository;
 	
 	@Autowired
 	CommercianteRepository commercianteRepository;
+	@Autowired
+	UtenteRepository utenteRepository;
 	
-	@Override
-	public List<PromozioneRiferimento> getPromozioni() {
+	public List<Promozione> getPromozioni() {
 		// TODO Auto-generated method stub
 		
 		List<Promozione> promozioni= new ArrayList<>();
@@ -40,43 +44,36 @@ public class PromozioniService implements IPromozioni {
 		
 
 		iteratore.forEach(Promozione -> promozioni.add(Promozione));
-		if(promozioni.isEmpty()){return null;}
 		
-		List<PromozioneRiferimento> promozioniRiferimento= new ArrayList<>();
 		
-		promozioni.forEach(Promozione ->
-		{
-			promozioniRiferimento.add(new PromozioneRiferimento(Promozione.getID(), Promozione.getDescrizione(), Promozione.getCommerciante().getID(), Promozione.getDataInizio(), Promozione.getDataFine()));
-			
-		});
 		
-		if (promozioniRiferimento.isEmpty()){return null;}
+		
+		if (promozioni.isEmpty()){return null;}
 		else
 		{
-			return promozioniRiferimento;
+			return promozioni;
 			}
 	}
 
-	@Override
-	public ResponseEntity<String> addPromozione(PromozioneRiferimento promozione) {
+	
+	public void addPromozione(NuovaPromozione promozione , String emailCommerciante) throws IllegalArgumentException , NotFoundException {
 		// TODO Auto-generated method stub
 		
 		//controllo validita idCommerciante
-		Optional<Commerciante> optionalCommerciante = commercianteRepository.findById(promozione.getIdCommerciante());
-		if(!optionalCommerciante.isPresent()) {  return new ResponseEntity<String>("Commerciante non trovato" , HttpStatus.BAD_REQUEST);}
+		Utente utente = utenteRepository.findByEmail(emailCommerciante).orElseThrow(()->new  NotFoundException("commerciante non trovato"));
+		Commerciante commerciante = (Commerciante) utente.getAssociato();
 	
 	if(promozione.getDataInizio() == null || promozione.getDataFine()==null || promozione.getDataFine().before(promozione.getDataInizio()))
 	{
-		return new ResponseEntity<String>("CONTROLLA DATE" , HttpStatus.NOT_ACCEPTABLE);
+		
+		throw new IllegalArgumentException("CONTROLLA DATE");
 	}
-		Commerciante commerciante = optionalCommerciante.get();
+	
 		Promozione promozioneSave = new Promozione(promozione.getDescrizione(), commerciante, promozione.getDataInizio(), promozione.getDataFine());
 		
-		
-	
 	
 		promozioneRepository.save(promozioneSave);
-		return new ResponseEntity<String>("PROMOZIONE AGGIUNTA" , HttpStatus.OK);
+		
 	
 	
 	
@@ -88,77 +85,82 @@ public class PromozioniService implements IPromozioni {
 		
 	
 
-	@Override
-	public List<PromozioneRiferimento> getPromozioniFiltrate(CategorieMerceologiche categoriaMerceologica) {
+	
+	public List<Promozione> getPromozioniFiltrate(CategorieMerceologiche categoriaMerceologica) throws NotFoundException{
 		// TODO Auto-generated method stub
-		List<PromozioneRiferimento> promozioniRiferimento= getPromozioniNonScadute();
-		List<PromozioneRiferimento> promozioniRiferimentoReturn= new ArrayList<>();
-		if (promozioniRiferimento.isEmpty()){ return null;}
-		promozioniRiferimento.forEach(PromozioneRiferimento ->
-		{
-			Commerciante commerciante = commercianteRepository.findById(PromozioneRiferimento.getIdCommerciante()).get();
-			if(commerciante.getCategoriaMerceologica()==categoriaMerceologica){promozioniRiferimentoReturn.add(PromozioneRiferimento);}
-		});
-		if(promozioniRiferimentoReturn.isEmpty()){return null;}
-		else{
-			return promozioniRiferimentoReturn;
-			}
-	}
-
-	@Override
-	public List<PromozioneRiferimento> getPromozioniCommerciante(Long idCommerciante) {
-		// TODO Auto-generated method stub
-		Optional<Commerciante> optionalCommerciante = commercianteRepository.findById(idCommerciante);
-		if(!optionalCommerciante.isPresent()){return null;}
-		List<PromozioneRiferimento> promozioniRiferimento= getPromozioni();
-		List<PromozioneRiferimento> promozioniRiferimentoReturn= getPromozioni();
-		if (promozioniRiferimento.isEmpty()){ return null;}
-		promozioniRiferimento.forEach(PromozioneRiferimento ->
+		List<Promozione> promozioni= getPromozioniNonScadute();
+		List<Promozione> promozioniReturn= new ArrayList<>();
+		if (promozioni.isEmpty()){ return null;}
+		promozioni.forEach(Promozione ->
 		{
 			
-			if(PromozioneRiferimento.getIdCommerciante()==idCommerciante){promozioniRiferimentoReturn.remove(PromozioneRiferimento.getId());}
+			Commerciante commerciante = commercianteRepository.findById(Promozione.getIdCommerciante()).get();
+			if(commerciante.getCategoriaMerceologica()==categoriaMerceologica){promozioniReturn.add(Promozione);}
 		});
-		if(promozioniRiferimentoReturn.isEmpty()){return null;}
+		if(promozioniReturn.isEmpty()){return null;}
 		else{
-			return promozioniRiferimentoReturn;
+			return promozioniReturn;
 			}
 	}
 
-	@Override
-	public List<PromozioneRiferimento> getPromozioniNonScadute() {
+	
+	public List<Promozione> getPromozioniCommerciante(String emailCommerciante) throws NotFoundException{
 		// TODO Auto-generated method stub
-		List<PromozioneRiferimento> promozioniRiferimento= getPromozioni();
+		
+		Utente utente = utenteRepository.findByEmail(emailCommerciante).orElseThrow(() -> new NotFoundException("COMMERCIANTE NON TROVATO"));
+		Commerciante commerciante = (Commerciante) utente.getAssociato();
+		
+		List<Promozione> promozioni= commerciante.getPromozioni();
+		
+		
+		if(promozioni.isEmpty()){return null;}
+		else{
+			return promozioni;
+			}
+	}
+
+	
+	public List<Promozione> getPromozioniNonScadute() {
+		// TODO Auto-generated method stub
+		List<Promozione> promozioni= getPromozioni();
 		Date dataAttuale = new Date();
-		List<PromozioneRiferimento> promozioniRiferimentoNonScadute= new ArrayList<>();
-		promozioniRiferimento.forEach(PromozioneRiferimento ->
+		List<Promozione> promozioniNonScadute= new ArrayList<>();
+		promozioni.forEach(Promozione ->
 		{
-			if(!PromozioneRiferimento.getDataFine().before(dataAttuale)){
-				promozioniRiferimentoNonScadute.add(PromozioneRiferimento);
+			if(!Promozione.getDataFine().before(dataAttuale)){
+				promozioniNonScadute.add(Promozione);
 			}
 		});
 		
-		if (promozioniRiferimento.isEmpty()){return null;}
+		if (promozioniNonScadute.isEmpty()){return null;}
 		else
 		{
-			return promozioniRiferimentoNonScadute;
+			return promozioniNonScadute;
 			}
 	}
 
 
-	@Override
-	public ResponseEntity<String> modificaPromozione(Long idPromozione, String descrizione, Date dataInizio,Date dataFine) {
+	/*
+	public void modificaPromozione(Long idPromozione, String descrizione, Date dataInizio,Date dataFine) throws IllegalArgumentException,NotFoundException{
 		// TODO Auto-generated method stub
-		Optional<Promozione> optionalPromozione = promozioneRepository.findById(idPromozione);
-		if(!optionalPromozione.isPresent()){return new ResponseEntity<String>("PROMOZIONE NON TROVATA , CONTROLLA ID" , HttpStatus.BAD_REQUEST);}
-		Promozione promozione = optionalPromozione.get();
-		if((descrizione==null || descrizione.isEmpty())&& dataInizio==null && dataFine ==null){return new ResponseEntity<String>("TUTTI I CAMPI DI MODIFICA SONO VUOTI" , HttpStatus.NOT_ACCEPTABLE);}
+		Promozione promozione = promozioneRepository.findById(idPromozione).orElseThrow(() -> new NotFoundException("PROMOZIONE NON TROVATA"));
+		
+		if((descrizione==null || descrizione.isEmpty())&& dataInizio==null && dataFine ==null){throw new IllegalArgumentException("TUTTI I CAMPI SONO VUOTI");}
 	
 	
 	if(descrizione!=null && !descrizione.isEmpty()){promozione.setDescrizione(descrizione);}
 	if(dataInizio!=null){promozione.setDataInizio(dataInizio);}
 	if(dataFine!=null){promozione.setDataFine(dataFine);}
 	promozioneRepository.save(promozione);
-	return new ResponseEntity<String>("PROMOZIONE MODIFICATA" , HttpStatus.OK);
+	
+	}
+
+*/
+	public void deletePromozione(Long idPromozione) throws NotFoundException{
+		// TODO Auto-generated method stub
+		Promozione promozione = promozioneRepository.findById(idPromozione).orElseThrow(() -> new NotFoundException("PROMOZIONE NON TROVATA"));
+		
+		promozioneRepository.delete(promozione);
 	}
 
 }

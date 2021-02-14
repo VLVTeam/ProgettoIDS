@@ -5,30 +5,33 @@ import java.util.ArrayList;
 
 import java.util.List;
 
-import java.util.Optional;
+
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import it.unicam.progettoc3.vlv.controller.IOrdini;
+import it.unicam.progettoc3.vlv.entity.dto.NuovoOrdine;
 import it.unicam.progettoc3.vlv.entity.elementi.Ordine;
 import it.unicam.progettoc3.vlv.entity.elementi.PuntoDiRitiro;
+import it.unicam.progettoc3.vlv.entity.enumeratori.NomiRuoli;
 import it.unicam.progettoc3.vlv.entity.enumeratori.StatiOrdine;
-import it.unicam.progettoc3.vlv.entity.riferimenti.OrdineRiferimento;
 import it.unicam.progettoc3.vlv.entity.utenti.Cliente;
 import it.unicam.progettoc3.vlv.entity.utenti.Commerciante;
 import it.unicam.progettoc3.vlv.entity.utenti.Corriere;
+import it.unicam.progettoc3.vlv.entity.utenti.Utente;
 import it.unicam.progettoc3.vlv.repository.ClienteRepository;
 import it.unicam.progettoc3.vlv.repository.CommercianteRepository;
 import it.unicam.progettoc3.vlv.repository.CorriereRepository;
 import it.unicam.progettoc3.vlv.repository.OrdineRepository;
 import it.unicam.progettoc3.vlv.repository.PuntoDiRitiroRepository;
+import it.unicam.progettoc3.vlv.repository.UtenteRepository;
+import javassist.NotFoundException;
 
 @Service
-public class OrdiniService implements IOrdini{
+@Transactional
+public class OrdiniService {
 	
 	@Autowired
 	CommercianteRepository commercianteRepository;
@@ -45,131 +48,105 @@ public class OrdiniService implements IOrdini{
 	@Autowired
 	PuntoDiRitiroRepository puntoDiRitiroRepository;
 	
-	
+	@Autowired
+	UtenteRepository utenteRepository;
 
-	@Override
-	public List<OrdineRiferimento> getOrdiniCliente(Long idCliente) {
+	public List<Ordine> getOrdiniCliente(String emailCliente) throws IllegalArgumentException,NotFoundException{
 		// TODO Auto-generated method stub
-
+ 
 		
-		List<Ordine> ordini= new ArrayList<>();
-		Iterable<Ordine> iteratore = ordineRepository.findAll();
-		iteratore.forEach(Ordine -> ordini.add(Ordine));
-		
-	if( ordini.isEmpty()){return null;}
-
-		
-			List<OrdineRiferimento> ordiniRiferimento = new ArrayList<>();
-			 
-			
-			
-			ordini.forEach(Ordine ->
-			{
-				
-				if(Ordine.getCliente().getID()==idCliente){
-
-				
-				Long idCorriere;
-				Long idPuntoDiRitiro;
-				if(Ordine.getCorriere()==null){idCorriere =null;}
-				else{	idCorriere =Ordine.getCorriere().getID();}
-				
-				if(Ordine.getPuntoDiRitiro()==null){idPuntoDiRitiro=null;}
-				else{idPuntoDiRitiro=Ordine.getPuntoDiRitiro().getID();}
-				
-				OrdineRiferimento ordineRiferimento =  new OrdineRiferimento(Ordine.getID(), Ordine.getCodiceRitiro(), Ordine.getDescrizione(), Ordine.getStato(), Ordine.getCommerciante().getID(), Ordine.getCliente().getID(), idCorriere, idPuntoDiRitiro, Ordine.getDataCreazione(), Ordine.getDataRitiro(), Ordine.getDataConsegnaPrevista());
-				ordiniRiferimento.add(ordineRiferimento);
-				}
-			});	
-		
-			if(ordiniRiferimento.isEmpty()){ return null;}
-			else{return ordiniRiferimento;}
+		Utente utente = utenteRepository.findByEmail(emailCliente).orElseThrow(()->new  NotFoundException("cliente non trovato"));
+		if(utente.getNomeRuolo() != NomiRuoli.ROLE_CLIENTE) throw new IllegalArgumentException("utente non è cliente");
+		Cliente cliente = (Cliente) utente.getAssociato(); 
+		return cliente.getOrdini();
 
 	}
 
-	@Override
-	public ResponseEntity<String> addOrdine(OrdineRiferimento ordine) {
+	
+	public void addOrdine(NuovoOrdine ordine ,String emailCommerciante)  throws IllegalArgumentException ,NotFoundException{
 		// TODO Auto-generated method stub
 		
 			//controllo validita idCommerciante
-			Optional<Commerciante> optionalCommerciante = commercianteRepository.findById(ordine.getIdCommerciante());
-			if(!optionalCommerciante.isPresent()) {  return new ResponseEntity<String>("Commerciante non trovato" , HttpStatus.BAD_REQUEST);}
+		Utente utente = utenteRepository.findByEmail(emailCommerciante).orElseThrow(()->new  NotFoundException("commerciante non trovato"));
+			Commerciante commerciante = (Commerciante) utente.getAssociato();
 			
 			//controllo validita idCliente
-			Optional<Cliente> optionalCliente = clienteRepository.findById(ordine.getIdCliente());
-			if(!optionalCliente.isPresent()) { return new ResponseEntity<String>("Cliente non trovato" , HttpStatus.BAD_REQUEST);}
 		
+			Cliente cliente = clienteRepository.findById(ordine.getIdCliente()).orElseThrow(()->new  NotFoundException("cliente non trovato"));
+			
 		
-			Commerciante commerciante = optionalCommerciante.get();
-			Cliente cliente = optionalCliente.get();
 			PuntoDiRitiro puntoDiRitiro = null;
 			if(ordine.getIdPuntoDiRitiro()!=null){
-			Optional<PuntoDiRitiro> optinalPuntoDiRitiro = puntoDiRitiroRepository.findById(ordine.getIdPuntoDiRitiro());
-				if(optinalPuntoDiRitiro.isPresent())
-				{
-					puntoDiRitiro=optinalPuntoDiRitiro.get();
-				}
+		
+				puntoDiRitiro = puntoDiRitiroRepository.findById(ordine.getIdPuntoDiRitiro()).orElseThrow(()->new  NotFoundException("punto di ritiro  non trovato"));
 			}
 			Ordine ordineSave ;
 			if(puntoDiRitiro==null){
-			ordineSave= new Ordine(ordine.getCodiceRitiro(), ordine.getDescrizione(), commerciante, cliente);
+			ordineSave= new Ordine( ordine.getDescrizione(), commerciante, cliente);
 			}
 			else
 			{
 				ordineSave= new Ordine(ordine.getCodiceRitiro(), ordine.getDescrizione(), commerciante, cliente, puntoDiRitiro);
 			}
 			ordineRepository.save(ordineSave);
-			return new ResponseEntity<String>("ORDINE AGGIUNTO" , HttpStatus.OK);
+		
 		
 		
 		
 	}
 
-	@Override
-	public ResponseEntity<String> ritiraOrdine(Long idOrdine , String codiceRitiro) {
+	
+	public void ritiraOrdine(Long idOrdine , String codiceRitiro)  throws IllegalArgumentException ,NotFoundException{
 		// TODO Auto-generated method stub
 		
+		Ordine ordine = ordineRepository.findById(idOrdine).orElseThrow(()->new  NotFoundException("ordine non trovato"));
 		
-		
-	Optional<Ordine> optionalOrdine= 	ordineRepository.findById(idOrdine);
-		if(!optionalOrdine.isPresent()){	
-			return new ResponseEntity<String>("ORDINE NON TROVATO , IMPOSSIBILE RITIRARE" , HttpStatus.BAD_REQUEST);
-		}
 	
-		else if (optionalOrdine.get().getStato()!= StatiOrdine.PRONTO_PER_IL_RITIRO)
-		{
-			return new ResponseEntity<String>("L'ORDINE NON E' NEL PUNTO DI RITIRO , IMPOSSIBILE RITIRARE" , HttpStatus.NOT_ACCEPTABLE);
-		}
-		else	if(optionalOrdine.get().getCodiceRitiro() == codiceRitiro)
+		
+		
+	
+		if (ordine.getStato()!= StatiOrdine.PRONTO_PER_IL_RITIRO)
 		{
 			
+			
+			throw	new IllegalArgumentException("L'ORDINE NON E' NEL PUNTO DI RITIRO , IMPOSSIBILE RITIRARE");
+		}
 		
-			Ordine ordine = optionalOrdine.get();
+		else if(ordine.getPuntoDiRitiro()==null)
+		{
+			throw	new IllegalArgumentException("L'ORDINE NON HA UN PUNTO DI RITIRO , IMPOSSIBILE RITIRARE");
+		}
+		
+		else if(   ordine.getCodiceRitiro().equals(codiceRitiro))
+		{
 			
 			ordine.setStato(StatiOrdine.CONSEGNATO);
 			ordineRepository.save(ordine);
-			return new ResponseEntity<String>("ORDINE RITIRATO" , HttpStatus.OK);
+			
 		}
 		else
 		{
-			return new ResponseEntity<String>("CODICE RITIRO ERRATO , IMPOSSIBILE RITIRARE" , HttpStatus.NOT_ACCEPTABLE);
+			
+
+			 throw new IllegalArgumentException("CODICE RITIRO ERRATO , IMPOSSIBILE RITIRARE");
+			
 		}
 		
 		
 	}
 
-	@Override
-	public List<OrdineRiferimento> getOrdiniLiberi() {
+	
+	public List<Ordine> getOrdiniLiberi() {
 		// TODO Auto-generated method stub
 		List<Ordine> ordini= new ArrayList<>();
+		
 		Iterable<Ordine> iteratore = ordineRepository.findAll();
 		iteratore.forEach(Ordine -> ordini.add(Ordine));
-		
 		
 		if( ordini.isEmpty()){return null;}
 
 		
-		List<OrdineRiferimento> ordiniRiferimento = new ArrayList<>();
+		List<Ordine> ordiniLiberi = new ArrayList<>();
 		 
 		
 		
@@ -178,191 +155,193 @@ public class OrdiniService implements IOrdini{
 			
 			if(Ordine.getStato()==StatiOrdine.IN_ACCETTAZIONE){
 
-			
-			Long idCorriere;
-			Long idPuntoDiRitiro;
-			if(Ordine.getCorriere()==null){idCorriere =null;}
-			else{	idCorriere =Ordine.getCorriere().getID();}
-			
-			if(Ordine.getPuntoDiRitiro()==null){idPuntoDiRitiro=null;}
-			else{idPuntoDiRitiro=Ordine.getPuntoDiRitiro().getID();}
-			
-			OrdineRiferimento ordineRiferimento =  new OrdineRiferimento(Ordine.getID(), Ordine.getCodiceRitiro(), Ordine.getDescrizione(), Ordine.getStato(), Ordine.getCommerciante().getID(), Ordine.getCliente().getID(), idCorriere, idPuntoDiRitiro, Ordine.getDataCreazione(), Ordine.getDataRitiro(), Ordine.getDataConsegnaPrevista());
-			ordiniRiferimento.add(ordineRiferimento);
+				ordiniLiberi.add(Ordine);
 			}
 		});	
 	
-		if(ordiniRiferimento.isEmpty()){ return null;}
-		else{return ordiniRiferimento;}
+		if(ordiniLiberi.isEmpty()){ return null;}
+		else{return ordiniLiberi;}
 	}
 
-	@Override
-	public List<OrdineRiferimento> getOrdiniDaRitirare(Long idCorriere) {
+	
+	public List<Ordine> getOrdiniDaRitirare(String emailCorriere)  throws IllegalArgumentException,NotFoundException{
 		// TODO Auto-generated method stub
 		List<Ordine> ordini= new ArrayList<>();
-		Iterable<Ordine> iteratore = ordineRepository.findAll();
-		iteratore.forEach(Ordine -> ordini.add(Ordine));
+		
+				Utente utente = utenteRepository.findByEmail(emailCorriere).orElseThrow(()->new  NotFoundException("utente non trovato"));
+				if(utente.getNomeRuolo()!=NomiRuoli.ROLE_CORRIERE) throw new IllegalArgumentException("utente non è corriere");
 				
+				
+				Corriere corriere = (Corriere) utente.getAssociato();
+				ordini =corriere.getOrdini();
 if( ordini.isEmpty()){return null;}
 
 		
-		List<OrdineRiferimento> ordiniRiferimento = new ArrayList<>();
+		List<Ordine> ordiniDaRitirare = new ArrayList<>();
 		 
 		
 		
 		ordini.forEach(Ordine ->
 		{
 			
-			if(Ordine.getStato()==StatiOrdine.IN_RITIRO && Ordine.getCorriere().getID()==idCorriere){
+			if(Ordine.getStato()==StatiOrdine.IN_RITIRO ){
 
 			
-			
-			Long idPuntoDiRitiro;		
-			
-			if(Ordine.getPuntoDiRitiro()==null){idPuntoDiRitiro=null;}
-			else{idPuntoDiRitiro=Ordine.getPuntoDiRitiro().getID();}
-			
-			OrdineRiferimento ordineRiferimento =  new OrdineRiferimento(Ordine.getID(), Ordine.getCodiceRitiro(), Ordine.getDescrizione(), Ordine.getStato(), Ordine.getCommerciante().getID(), Ordine.getCliente().getID(), idCorriere, idPuntoDiRitiro, Ordine.getDataCreazione(), Ordine.getDataRitiro(), Ordine.getDataConsegnaPrevista());
-			ordiniRiferimento.add(ordineRiferimento);
+		
+				ordiniDaRitirare.add(Ordine);
 			}
 		});	
 	
-		if(ordiniRiferimento.isEmpty()){ return null;}
-		else{return ordiniRiferimento;}
+		if(ordiniDaRitirare.isEmpty()){ return null;}
+		else{return ordiniDaRitirare;}
 	}
 
-	@Override
-	public List<OrdineRiferimento> getOrdiniInTransito(Long idCorriere) {
+	
+	public List<Ordine> getOrdiniInTransito(String emailCorriere)  throws IllegalArgumentException ,NotFoundException{
 		// TODO Auto-generated method stub
 		List<Ordine> ordini= new ArrayList<>();
-		Iterable<Ordine> iteratore = ordineRepository.findAll();
-		iteratore.forEach(Ordine -> ordini.add(Ordine));
+		
+		Utente utente = utenteRepository.findByEmail(emailCorriere).orElseThrow(()->new  NotFoundException("utente non trovato"));
+		if(utente.getNomeRuolo()!=NomiRuoli.ROLE_CORRIERE) throw new IllegalArgumentException("utente non è corriere");
 		
 		
+		Corriere corriere = (Corriere) utente.getAssociato();
+		ordini =corriere.getOrdini();
 if( ordini.isEmpty()){return null;}
 
-		
-		List<OrdineRiferimento> ordiniRiferimento = new ArrayList<>();
-		 
-		
-		
-		ordini.forEach(Ordine ->
-		{
-			
-			if(Ordine.getStato()==StatiOrdine.IN_TRANSITO && Ordine.getCorriere().getID()==idCorriere){
 
-			
-			
-			Long idPuntoDiRitiro;		
-			
-			if(Ordine.getPuntoDiRitiro()==null){idPuntoDiRitiro=null;}
-			else{idPuntoDiRitiro=Ordine.getPuntoDiRitiro().getID();}
-			
-			OrdineRiferimento ordineRiferimento =  new OrdineRiferimento(Ordine.getID(), Ordine.getCodiceRitiro(), Ordine.getDescrizione(), Ordine.getStato(), Ordine.getCommerciante().getID(), Ordine.getCliente().getID(), idCorriere, idPuntoDiRitiro, Ordine.getDataCreazione(), Ordine.getDataRitiro(), Ordine.getDataConsegnaPrevista());
-			ordiniRiferimento.add(ordineRiferimento);
-			}
-		});	
+List<Ordine> ordiniInTransito = new ArrayList<>();
+ 
+
+
+ordini.forEach(Ordine ->
+{
 	
-		if(ordiniRiferimento.isEmpty()){ return null;}
-		else{return ordiniRiferimento;}
+	if(Ordine.getStato()==StatiOrdine.IN_TRANSITO ){
+
+	
+
+		ordiniInTransito.add(Ordine);
+	}
+});	
+
+if(ordiniInTransito.isEmpty()){ return null;}
+else{return ordiniInTransito;}
 	}
 
-	@Override
-	public ResponseEntity<String> setPresaInCaricoOrdine(Long idOrdine,Long idCorriere , Date dataPrevistaRitiro) {
+	
+	public void setPresaInCaricoOrdine(Long idOrdine, Date dataPrevistaRitiro,String emailCorriere) throws IllegalArgumentException , NotFoundException{
 		// TODO Auto-generated method stub
 		
-		Optional<Ordine> optionalOrdine= 	ordineRepository.findById(idOrdine);
-		if(!optionalOrdine.isPresent()){
-			return new ResponseEntity<String>("ORDINE NON TROVATO , IMPOSSIBILE RITIRARE" , HttpStatus.BAD_REQUEST);
-		}
+		Utente utente = utenteRepository.findByEmail(emailCorriere).orElseThrow(()->new  NotFoundException("utente non trovato") );
+		Corriere corriere = (Corriere) utente.getAssociato();
 		
-		Optional<Corriere> optionalCorriere= 	corriereRepository.findById(idCorriere);
-		 if(!optionalCorriere.isPresent())
+		Ordine ordine = ordineRepository.findById(idOrdine).orElseThrow(() -> new NotFoundException("ordine non trovato"));
+	
+		if(dataPrevistaRitiro == null){throw new IllegalArgumentException("IMPOSSIBILE IMPOSTARE DATA RITIRO PREVISTA , CONTROLLARE DATA INSERITA");}
+		
+		if(ordine.getDataCreazione().after(dataPrevistaRitiro)){throw new IllegalArgumentException("LA DATA DI RITIRO PREVISTA DEVE ESSERE DOPO QUELLA DI CREAZIONE");}
+		 if(ordine.getStato()==StatiOrdine.IN_ACCETTAZIONE && dataPrevistaRitiro!=null)
 		{
-				return new ResponseEntity<String>("CORRIERE NON TROVATO , IMPOSSIBILE RITIRARE" , HttpStatus.BAD_REQUEST);
-
-		}
-		 if(optionalOrdine.get().getStato()==StatiOrdine.IN_ACCETTAZIONE && dataPrevistaRitiro!=null)
-		{
-			 Ordine ordine = optionalOrdine.get();
+			 
 			ordine.setStato(StatiOrdine.IN_RITIRO);
 			ordine.setDataRitiro(dataPrevistaRitiro);
-			Corriere corriere = optionalCorriere.get();
 			ordine.setCorriere(corriere);
 			ordineRepository.save(ordine);
-			return new ResponseEntity<String>("ORDINE PRESO IN CARICO" , HttpStatus.OK);
+			
 		}
 		else
 		{
-			return new ResponseEntity<String>("IMPOSSIBILE PRENDERE IN CARICO" , HttpStatus.NOT_ACCEPTABLE);
+			
+			throw new IllegalArgumentException("Ordine non puo essere preso in carico");
 		}
 	}
 
-	@Override
-	public ResponseEntity<String> setDataConsegnaPrevista(Long idOrdine, Date dataConsegnaPrevista) {
+	
+	public void setDataConsegnaPrevista(Long idOrdine, Date dataConsegnaPrevista)  throws IllegalArgumentException,NotFoundException{
 		// TODO Auto-generated method stub
-		Optional<Ordine> optionalOrdine= 	ordineRepository.findById(idOrdine);
-		if(!optionalOrdine.isPresent()){
-			return new ResponseEntity<String>("ORDINE NON TROVATO , IMPOSSIBILE RITIRARE" , HttpStatus.BAD_REQUEST);
-		}
-		if(optionalOrdine.get().getStato()==StatiOrdine.IN_RITIRO && dataConsegnaPrevista!=null)
+		
+		Ordine ordine = ordineRepository.findById(idOrdine).orElseThrow(() -> new NotFoundException("Ordine non trovato "));
+		
+		if(dataConsegnaPrevista == null){throw new IllegalArgumentException("IMPOSSIBILE IMPOSTARE DATA CONSEGNA PREVISTA , CONTROLLARE DATA INSERITA");}
+		if(ordine.getDataCreazione().after(dataConsegnaPrevista)){throw new IllegalArgumentException("LA DATA DI CONSEGNA PREVISTA DEVE ESSERE DOPO QUELLA DI RITIRO");}
+		if(ordine.getStato()==StatiOrdine.IN_RITIRO && dataConsegnaPrevista!=null)
 		{
-			Ordine ordine = optionalOrdine.get();
 			ordine.setStato(StatiOrdine.IN_TRANSITO);
 			ordine.setDataConsegnaPrevista(dataConsegnaPrevista);
 			ordineRepository.save(ordine);
-			return new ResponseEntity<String>("DATA CONSEGNA PREVISTA IMPOSTATA" , HttpStatus.OK);
+			
 		}
 		else
 		{
-			return new ResponseEntity<String>("IMPOSSIBILE IMPOSTARE DATA CONSEGNA PREVISTA" , HttpStatus.NOT_ACCEPTABLE);
+			throw new IllegalArgumentException("IMPOSSIBILE IMPOSTARE ORDINE IN TRANSITO");
 		}
 	}
 
-	@Override
-	public ResponseEntity<String> setOrdineConsegnato(Long idOrdine) {
+	
+	public void setOrdineConsegnato(Long idOrdine) throws IllegalArgumentException , NotFoundException{
 		// TODO Auto-generated method stub
 		
-		Optional<Ordine> optionalOrdine= 	ordineRepository.findById(idOrdine);
-		if(!optionalOrdine.isPresent()){
-			return new ResponseEntity<String>("ORDINE NON TROVATO , IMPOSSIBILE RITIRARE" , HttpStatus.BAD_REQUEST);
-		}
+		Ordine ordine = ordineRepository.findById(idOrdine).orElseThrow(() -> new NotFoundException("Ordine non trovato "));
 		
-		if(optionalOrdine.get().getStato()==StatiOrdine.IN_TRANSITO && optionalOrdine.get().getPuntoDiRitiro() == null)
+		if(ordine.getStato()!=StatiOrdine.IN_TRANSITO ){throw new IllegalArgumentException("impossibile consegnare ordine , l'ordine non è in transito");}
+		if(ordine.getPuntoDiRitiro()!=null){throw new IllegalArgumentException("impossibile consegnare ordine , l'ordine deve essere depositato presso un punto di ritiro");}
+		if(ordine.getStato()==StatiOrdine.IN_TRANSITO && ordine.getPuntoDiRitiro() == null)
 		{
-			Ordine ordine = optionalOrdine.get();
+			
 			ordine.setStato(StatiOrdine.CONSEGNATO);
 			
 			ordineRepository.save(ordine);
-			return new ResponseEntity<String>("ORDINE CONSEGNATO" , HttpStatus.OK);
+			
 		}
 		else
 		{
-			return new ResponseEntity<String>("IMPOSSIBILE CONSEGNARE ORDINE" , HttpStatus.NOT_ACCEPTABLE);
+			throw new IllegalArgumentException("impossibile consegnare ordine ");
+			
 		}
 	}
 
-	@Override
-	public ResponseEntity<String> setOrdineProntoPerIlRitiro(Long idOrdine) {
+	
+	public void setOrdineProntoPerIlRitiro(Long idOrdine)  throws IllegalArgumentException , NotFoundException{
 		// TODO Auto-generated method stub
 		
-		Optional<Ordine> optionalOrdine= 	ordineRepository.findById(idOrdine);
-		if(!optionalOrdine.isPresent()){
-			return new ResponseEntity<String>("ORDINE NON TROVATO , IMPOSSIBILE RITIRARE" , HttpStatus.BAD_REQUEST);
-		}
+		Ordine ordine = ordineRepository.findById(idOrdine).orElseThrow(() -> new NotFoundException("Ordine non trovato "));
 		
-		if(optionalOrdine.get().getStato()==StatiOrdine.IN_TRANSITO && optionalOrdine.get().getPuntoDiRitiro()!=null)
+		
+		if(ordine.getStato()==StatiOrdine.IN_TRANSITO && ordine.getPuntoDiRitiro() != null)
 		{
-			Ordine ordine = optionalOrdine.get();
+			
 			ordine.setStato(StatiOrdine.PRONTO_PER_IL_RITIRO);
+			
 			ordineRepository.save(ordine);
 			
-			return new ResponseEntity<String>("ORDINE DEPOSITATO PRESSO IL PUNTO DI RITIRO" , HttpStatus.OK);
 		}
 		else
 		{
-			return new ResponseEntity<String>("IMPOSSIBILE DEPOSITARE  ORDINE PRESSO IL PUNTO DI RITIRO" , HttpStatus.NOT_ACCEPTABLE);
+			throw new IllegalArgumentException("impossibile depositare ordine ");
+			
 		}
+	}
+
+
+	public Commerciante getCommercianteById(Long idCommerciante) throws NotFoundException{
+		// TODO Auto-generated method stub
+		Commerciante commerciante=commercianteRepository.findById(idCommerciante).orElseThrow(() -> new NotFoundException("COMMERCIANTE NON TROVATO"));
+		return commerciante;
+	}
+
+
+	public PuntoDiRitiro getPuntoDiRitiroById(Long idPuntoDiRitiro) throws  NotFoundException{
+		// TODO Auto-generated method stub
+		PuntoDiRitiro puntoDiRitiro=puntoDiRitiroRepository.findById(idPuntoDiRitiro).orElseThrow(() -> new NotFoundException("PUNTO DI RITIRO NON TROVATO"));
+		return puntoDiRitiro;
+	}
+
+
+	public Cliente getClienteById(Long idCliente) throws NotFoundException{
+		// TODO Auto-generated method stub
+		Cliente cliente=clienteRepository.findById(idCliente).orElseThrow(() -> new NotFoundException("CLIENTE NON TROVATO"));
+		return cliente;
 	}
 
 

@@ -38,26 +38,29 @@ private Long ID;
 @NotBlank
 private String codiceRitiro;
 
+@Column(nullable = false)
+@NotNull
+@NotBlank
 private String descrizione;
 
-@JsonBackReference
+@JsonBackReference(value="commerciante-ordine")
 @ManyToOne(fetch = FetchType.EAGER ,  cascade = CascadeType.ALL , optional = false)
 @NotNull
 private Commerciante commerciante;
 
-@JsonBackReference
+@JsonBackReference(value="corriere-ordine")
 @ManyToOne(fetch = FetchType.LAZY ,  cascade = CascadeType.ALL , optional= true)
 private Corriere corriere;
 
-@JsonBackReference
+@JsonBackReference(value="punto-ordine")
 @ManyToOne(fetch = FetchType.LAZY ,  cascade = CascadeType.ALL , optional= true)
 private PuntoDiRitiro puntoDiRitiro;
 
 @Enumerated(EnumType.STRING)
 private StatiOrdine stato;
 
-@JsonBackReference
-@ManyToOne(fetch = FetchType.EAGER ,  cascade = CascadeType.ALL , optional = false)
+@JsonBackReference(value="cliente-ordine")
+@ManyToOne(fetch = FetchType.EAGER ,   optional = false)
 @NotNull
 private Cliente cliente;
 
@@ -73,9 +76,9 @@ private Date dataRitiro;
 private Date dataConsegnaPrevista;
 
 public Ordine(){}
-public Ordine(String codiceRitiro, String descrizione, Commerciante commerciante ,Cliente cliente ) {
+public Ordine( String descrizione, Commerciante commerciante ,Cliente cliente ) {
 	
-	this.codiceRitiro = codiceRitiro;
+	this.codiceRitiro = null;
 	this.descrizione = descrizione;
 	this.commerciante = commerciante;
 	this.cliente=cliente;
@@ -121,6 +124,7 @@ public Long getID() {
 	return ID;
 }
 public String getCodiceRitiro() {
+	
 	return codiceRitiro;
 }
 public String getDescrizione() {
@@ -150,6 +154,47 @@ public PuntoDiRitiro getPuntoDiRitiro() {
 }
 
 
+	public Long getIdCliente(){
+		return cliente.getId();
+	}
 
+	public Long getIdCommerciante(){
+		return commerciante.getId();
+	}
+	
+	public Long getIdPuntoDiRitiro(){
+		if (puntoDiRitiro != null)
+		return puntoDiRitiro.getID();
+		else return null;
+	}
+	
+	public Long getIdCorriere(){
+		if(corriere == null) return null;
+		else
+		return corriere.getId();
+	}
+	public void setID(Long iD) {
+		ID = iD;
+	}
+	public void setCodiceRitiro(String codiceRitiro) {
+		this.codiceRitiro = codiceRitiro;
+	}
+	public void setDescrizione(String descrizione) {
+		this.descrizione = descrizione;
+	}
+	public void setCommerciante(Commerciante commerciante) {
+		this.commerciante = commerciante;
+	}
+	public void setPuntoDiRitiro(PuntoDiRitiro puntoDiRitiro) {
+		this.puntoDiRitiro = puntoDiRitiro;
+	}
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
+	}
+	public void setDataCreazione(Date dataCreazione) {
+		this.dataCreazione = dataCreazione;
+	}
 
+	
+	
 }

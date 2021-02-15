@@ -160,7 +160,8 @@ public class PromozioniService {
 		// TODO Auto-generated method stub
 		Promozione promozione = promozioneRepository.findById(idPromozione).orElseThrow(() -> new NotFoundException("PROMOZIONE NON TROVATA"));
 		
-		promozioneRepository.delete(promozione);
+		//promozioneRepository.delete(promozione);
+		promozioneRepository.removePromozioneById(promozione.getID());
 	}
 
 }

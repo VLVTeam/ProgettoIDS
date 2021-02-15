@@ -54,7 +54,7 @@ public class Commerciante extends Ruolo  {
 	
 	
 	@JsonManagedReference
-	@OneToMany(fetch = FetchType.LAZY ,  cascade = CascadeType.ALL , mappedBy="commerciante" , orphanRemoval = false)
+	@OneToMany(fetch = FetchType.LAZY ,  cascade = CascadeType.ALL , mappedBy="commerciante" )
 	List<Promozione> promozioni ;
 	
 	public Commerciante(){}

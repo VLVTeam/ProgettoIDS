@@ -38,8 +38,9 @@ public class PuntiDiRitiroService  {
 		
 		
 		
-			puntoDiRitiroRepository.delete(puntoDiRitiro);
+			//puntoDiRitiroRepository.delete(puntoDiRitiro);
 			
+			puntoDiRitiroRepository.removePuntoDiRitiroById(puntoDiRitiro.getID());
 		
 		
 	}

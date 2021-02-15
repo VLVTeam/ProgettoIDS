@@ -14,8 +14,13 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 
 @Entity(name = "punto_di_ritiro")
 @Table(name = "punto_di_ritiro")
@@ -32,7 +37,8 @@ private String indirizzo;
 
 @JsonIgnore
 @JsonManagedReference(value="punto-ordine")
-@OneToMany(fetch = FetchType.LAZY ,  cascade = CascadeType.ALL , mappedBy="puntoDiRitiro" , orphanRemoval = true)
+@OnDelete(action = OnDeleteAction.CASCADE)
+@OneToMany(  fetch = FetchType.LAZY , cascade = CascadeType.ALL , mappedBy="puntoDiRitiro"  , orphanRemoval=true)
 List<Ordine> ordini ;
 
 

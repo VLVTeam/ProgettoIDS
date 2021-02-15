@@ -17,7 +17,10 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -33,9 +36,7 @@ public class Ordine {
 @GeneratedValue(strategy = GenerationType.IDENTITY)	
 private Long ID;
 
-@Column(nullable = false)
-@NotNull
-@NotBlank
+
 private String codiceRitiro;
 
 @Column(nullable = false)
@@ -53,7 +54,8 @@ private Commerciante commerciante;
 private Corriere corriere;
 
 @JsonBackReference(value="punto-ordine")
-@ManyToOne(fetch = FetchType.LAZY ,  cascade = CascadeType.ALL , optional= true)
+@OnDelete(action = OnDeleteAction.CASCADE)
+@ManyToOne(fetch = FetchType.LAZY ,  cascade = CascadeType.ALL , optional= true )
 private PuntoDiRitiro puntoDiRitiro;
 
 @Enumerated(EnumType.STRING)
@@ -64,13 +66,16 @@ private StatiOrdine stato;
 @NotNull
 private Cliente cliente;
 
+
 @Temporal(TemporalType.DATE)
 @CreationTimestamp
 @Column(nullable=false)
 private Date dataCreazione;
 
+
 @Temporal(TemporalType.DATE)
 private Date dataRitiro;
+
 
 @Temporal(TemporalType.DATE)
 private Date dataConsegnaPrevista;
@@ -124,8 +129,9 @@ public Long getID() {
 	return ID;
 }
 public String getCodiceRitiro() {
-	
+	if(puntoDiRitiro!=null)
 	return codiceRitiro;
+	else return null;
 }
 public String getDescrizione() {
 	return descrizione;

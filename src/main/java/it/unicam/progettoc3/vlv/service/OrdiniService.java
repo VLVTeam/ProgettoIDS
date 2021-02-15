@@ -86,6 +86,8 @@ public class OrdiniService {
 			}
 			else
 			{
+				if(ordine.getIdPuntoDiRitiro().equals("")) {throw new IllegalArgumentException("CODICE RITIRO BLANK");}
+				if(ordine.getIdPuntoDiRitiro()==null) {throw new IllegalArgumentException("CODICE RITIRO NULLO");}
 				ordineSave= new Ordine(ordine.getCodiceRitiro(), ordine.getDescrizione(), commerciante, cliente, puntoDiRitiro);
 			}
 			ordineRepository.save(ordineSave);

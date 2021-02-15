@@ -3,12 +3,14 @@ package it.unicam.progettoc3.vlv.controller;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+
 import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 
 import it.unicam.progettoc3.vlv.entity.dto.NuovoOrdine;
 import it.unicam.progettoc3.vlv.entity.elementi.Ordine;
@@ -154,11 +157,13 @@ public class OrdiniController {
 
 	@PreAuthorize("hasRole('CORRIERE')")
 	@PutMapping(value = "/setPresaInCaricoOrdine/{idOrdine}/{dataPrevistaRitiro}")
-	public ResponseEntity<String> setPresaInCaricoOrdine(@PathVariable("idOrdine") Long idOrdine,@PathVariable("dataPrevistaRitiro")  String dataPrevistaRitiro ,   Authentication authentication) {
+	public ResponseEntity<String> setPresaInCaricoOrdine(@PathVariable("idOrdine") Long idOrdine,@PathVariable("dataPrevistaRitiro")   String dataPrevistaRitiro ,   Authentication authentication) {
 		
 	// TODO Auto-generated method stub
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		String emailCorriere = authentication.getName();
+		
+	
 		try {
 			Date data = format.parse(dataPrevistaRitiro);
 					 ordiniService.setPresaInCaricoOrdine(idOrdine,  data,emailCorriere);
@@ -174,6 +179,8 @@ public class OrdiniController {
 		}
 	}
 
+
+	
 	@PreAuthorize("hasRole('CORRIERE')")
 	@PutMapping(value = "/setDataConsegnaPrevista/{idOrdine}/{dataConsegnaPrevista}")
 	

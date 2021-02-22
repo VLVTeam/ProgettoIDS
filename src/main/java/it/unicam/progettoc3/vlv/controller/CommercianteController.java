@@ -19,11 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 import it.unicam.progettoc3.vlv.entity.utenti.Commerciante;
 import it.unicam.progettoc3.vlv.entity.utenti.Utente;
 import it.unicam.progettoc3.vlv.service.CommercianteService;
+import it.unicam.progettoc3.vlv.utils.Messaggio;
 import javassist.NotFoundException;
 
 @RestController
 @RequestMapping("/gestoreCommercianti")
-@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin(origins = "http://localhost:4200")
 public class CommercianteController {
 
 	@Autowired
@@ -31,14 +32,16 @@ public class CommercianteController {
 	
 	@PreAuthorize("hasRole('AMMINISTRATORE')")
 	@PutMapping(value ="/accettaIscrizioneCommerciante/{idCommerciante}")
-	public ResponseEntity<String> accettaIscrizioneCommerciante(@PathVariable("idCommerciante") Long idCommerciante) {
+	public ResponseEntity<?> accettaIscrizioneCommerciante(@PathVariable("idCommerciante") Long idCommerciante) {
 		// TODO Auto-generated method stub
 		 try {
 			commercianteService.accettaIscrizioneCommerciante( idCommerciante);
-			return new ResponseEntity<>("ISCRIZIONE COMMERCIANTE ACCETTATA",HttpStatus.OK);
+		//	return new ResponseEntity<>("ISCRIZIONE COMMERCIANTE ACCETTATA",HttpStatus.OK);
+			return  new ResponseEntity<>(new Messaggio("ISCRIZIONE COMMERCIANTE ACCETTATA"),HttpStatus.OK);
 		} catch (NotFoundException e) {
 			// TODO Auto-generated catch block
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			//return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return  new ResponseEntity<>(new Messaggio(e.getMessage()),HttpStatus.BAD_REQUEST);
 		}
 	}
 	
@@ -57,9 +60,11 @@ public class CommercianteController {
 		try{
 		return new ResponseEntity<Commerciante>(commercianteService.getCommercianteByIdUtente(idUtente),HttpStatus.OK);
 		}catch(NotFoundException e){
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return  new ResponseEntity<>(new Messaggio(e.getMessage()),HttpStatus.BAD_REQUEST);
+			//return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}catch(IllegalArgumentException e){
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return  new ResponseEntity<>(new Messaggio(e.getMessage()),HttpStatus.BAD_REQUEST);
+			//return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
 	

@@ -24,13 +24,13 @@ import it.unicam.progettoc3.vlv.entity.dto.NuovoCorriere;
 import it.unicam.progettoc3.vlv.security.dto.JwtDto;
 import it.unicam.progettoc3.vlv.security.dto.LoginUtente;
 import it.unicam.progettoc3.vlv.security.service.AuthService;
-import it.unicam.progettoc3.vlv.security.utils.Messaggio;
+import it.unicam.progettoc3.vlv.utils.Messaggio;
 
 
 
 @RestController
 @RequestMapping("/auth")
-@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin(origins = "http://localhost:4200")
 public class AuthController {
 
 
@@ -42,7 +42,8 @@ public class AuthController {
 		public ResponseEntity<?> nuovoCliente(@Valid @RequestBody NuovoCliente nuovoCliente , BindingResult bindingResult)
 		{
 			if(bindingResult.hasErrors())
-				return new ResponseEntity<String>("controlla campi" , HttpStatus.BAD_REQUEST);
+				//return new ResponseEntity<String>("controlla campi" , HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(new Messaggio("controlla campi"),HttpStatus.BAD_REQUEST);
 			return authService.nuovoCliente(nuovoCliente);
 		}
 		
@@ -50,7 +51,8 @@ public class AuthController {
 		public ResponseEntity<?> nuovoCommerciante(@Valid @RequestBody NuovoCommerciante nuovoCommerciante , BindingResult bindingResult)
 		{
 			if(bindingResult.hasErrors())
-				return new ResponseEntity<String>("controlla campi" , HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<>(new Messaggio("controlla campi"),HttpStatus.BAD_REQUEST);
+			//	return new ResponseEntity<String>("controlla campi" , HttpStatus.BAD_REQUEST);
 			return authService.nuovoCommerciante(nuovoCommerciante);
 		}
 		
@@ -58,7 +60,8 @@ public class AuthController {
 		public ResponseEntity<?> nuovoCorriere(@Valid @RequestBody NuovoCorriere nuovoCorriere , BindingResult bindingResult)
 		{
 			if(bindingResult.hasErrors())
-				return new ResponseEntity<String>("controlla campi" , HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<>(new Messaggio("controlla campi"),HttpStatus.BAD_REQUEST);
+				//return new ResponseEntity<String>("controlla campi" , HttpStatus.BAD_REQUEST);
 			return authService.nuovoCorriere(nuovoCorriere);
 		}
 		

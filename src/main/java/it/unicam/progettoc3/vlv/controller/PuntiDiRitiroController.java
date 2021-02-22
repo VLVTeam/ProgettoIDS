@@ -20,36 +20,41 @@ import org.springframework.web.bind.annotation.RestController;
 
 import it.unicam.progettoc3.vlv.entity.elementi.PuntoDiRitiro;
 import it.unicam.progettoc3.vlv.service.PuntiDiRitiroService;
+import it.unicam.progettoc3.vlv.utils.Messaggio;
 import javassist.NotFoundException;
 
 @RestController
 @RequestMapping("/gestorePuntiDiRitiro")
-@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin(origins = "http://localhost:4200")
 public class PuntiDiRitiroController  {
 
 	@Autowired
 	PuntiDiRitiroService puntiDiRitiroService;
+	
 	@PostMapping(value="/addPuntoDiRitiro")
 	@PreAuthorize("hasRole('AMMINISTRATORE')")
-	public ResponseEntity<String> addPuntoDiRitiro(@Valid @RequestBody PuntoDiRitiro puntoDiRitiro , BindingResult bindingResult) {
+	public ResponseEntity<?> addPuntoDiRitiro(@Valid @RequestBody PuntoDiRitiro puntoDiRitiro , BindingResult bindingResult) {
 		// TODO Auto-generated method stub
 		if(bindingResult.hasErrors())
-			return new ResponseEntity<String>("controlla campi" , HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(new Messaggio("controlla campi"),HttpStatus.BAD_REQUEST);
+			//return new ResponseEntity<String>("controlla campi" , HttpStatus.BAD_REQUEST);
 		 puntiDiRitiroService.addPuntoDiRitiro(puntoDiRitiro);
-		 return new ResponseEntity<>("PUNTO DI RITIRO AGGIUNTO",HttpStatus.OK);
+		 return new ResponseEntity<>(new Messaggio("PUNTO DI RITIRO AGGIUNTO"),HttpStatus.OK);
+		// return new ResponseEntity<>("PUNTO DI RITIRO AGGIUNTO",HttpStatus.OK);
 	}
 
 	@DeleteMapping(value="/deletePuntoDiRitiro/{idPuntoDiRitiro}")
 	@PreAuthorize("hasRole('AMMINISTRATORE')")
-	public ResponseEntity<String> deletePuntoDiRitiro(@PathVariable("idPuntoDiRitiro") Long idPuntoDiRitiro) {
+	public ResponseEntity<?> deletePuntoDiRitiro(@PathVariable("idPuntoDiRitiro") Long idPuntoDiRitiro) {
 		// TODO Auto-generated method stub
 		 try {
 			puntiDiRitiroService.deletePuntoDiRitiro(idPuntoDiRitiro);
-			return new ResponseEntity<>("PUNTO DI RITIRO RIMOSSO",HttpStatus.OK);
+			//return new ResponseEntity<>("PUNTO DI RITIRO RIMOSSO",HttpStatus.OK);
+			 return new ResponseEntity<>(new Messaggio("PUNTO DI RITIRO ELIMINATO"),HttpStatus.OK);
 		} catch (NotFoundException e) {
 			// TODO Auto-generated catch block
-			return  new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);		}
-		 
+			//return  new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);		}
+			return  new ResponseEntity<>(new Messaggio(e.getMessage()),HttpStatus.BAD_REQUEST);		}
 	}
 
 	@GetMapping(value="/getPuntiDiRitiro")

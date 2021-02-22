@@ -61,6 +61,18 @@ public class OrdiniService {
 		return cliente.getOrdini();
 
 	}
+	
+	
+	public List<Ordine> getOrdiniCommerciante(String emailCommerciante) throws IllegalArgumentException,NotFoundException{
+		// TODO Auto-generated method stub
+ 
+		
+		Utente utente = utenteRepository.findByEmail(emailCommerciante).orElseThrow(()->new  NotFoundException("commerciante non trovato"));
+		if(utente.getNomeRuolo() != NomiRuoli.ROLE_COMMERCIANTE) throw new IllegalArgumentException("utente non è commerciante");
+		Commerciante commerciante = (Commerciante) utente.getAssociato(); 
+		return commerciante.getOrdini();
+
+	}
 
 	
 	public void addOrdine(NuovoOrdine ordine ,String emailCommerciante)  throws IllegalArgumentException ,NotFoundException{

@@ -19,7 +19,7 @@ import it.unicam.progettoc3.vlv.service.ClienteService;
 
 @RestController
 @RequestMapping("/gestoreClienti")
-@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin(origins = "http://localhost:4200")
 public class ClienteController {
 
 	@Autowired

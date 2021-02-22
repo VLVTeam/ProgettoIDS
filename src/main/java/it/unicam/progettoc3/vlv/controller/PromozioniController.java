@@ -27,12 +27,13 @@ import it.unicam.progettoc3.vlv.entity.dto.NuovaPromozione;
 import it.unicam.progettoc3.vlv.entity.elementi.Promozione;
 import it.unicam.progettoc3.vlv.entity.enumeratori.CategorieMerceologiche;
 import it.unicam.progettoc3.vlv.service.PromozioniService;
+import it.unicam.progettoc3.vlv.utils.Messaggio;
 import javassist.NotFoundException;
 
 
 @RestController
 @RequestMapping("/gestorePromozioni")
-@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin(origins = "http://localhost:4200")
 public class PromozioniController {
 
 	@Autowired 
@@ -43,11 +44,12 @@ public class PromozioniController {
 
 	@PostMapping(value = "/addPromozione")
 	@PreAuthorize("hasRole('COMMERCIANTE')")
-	public ResponseEntity<String> addPromozione(@Valid @RequestBody NuovaPromozione promozione, BindingResult bindingResult , Authentication authentication) {
+	public ResponseEntity<?> addPromozione(@Valid @RequestBody NuovaPromozione promozione, BindingResult bindingResult , Authentication authentication) {
 		// TODO Auto-generated method stub
 		
 		if(bindingResult.hasErrors())
-			return new ResponseEntity<String>("controlla campi" , HttpStatus.BAD_REQUEST);
+			//return new ResponseEntity<String>("controlla campi" , HttpStatus.BAD_REQUEST);
+		return  new ResponseEntity<>(new Messaggio("controlla campi"),HttpStatus.BAD_REQUEST);
 		
 		
 		String emailCommerciante=authentication.getName();
@@ -55,12 +57,15 @@ public class PromozioniController {
 			 promozioniService.addPromozione(promozione,emailCommerciante);
 
 		
-			return  new ResponseEntity<>("PROMOZIONE AGGIUNTA",HttpStatus.OK);
+			//return  new ResponseEntity<>("PROMOZIONE AGGIUNTA",HttpStatus.OK);
+			return  new ResponseEntity<>(new Messaggio("PROMOZIONE AGGIUNTA"),HttpStatus.OK);
 		} catch (IllegalArgumentException e) {
 			// TODO: handle exception
-			return  new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+			//return  new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+			return  new ResponseEntity<>(new Messaggio(e.getMessage()),HttpStatus.BAD_REQUEST);
 	}catch(NotFoundException e){
-		return  new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+		//return  new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+		return  new ResponseEntity<>(new Messaggio(e.getMessage()),HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -68,16 +73,18 @@ public class PromozioniController {
 	
 	@DeleteMapping(value = "/deletePromozione/{idPromozione}")
 	@PreAuthorize("hasRole('COMMERCIANTE')")
-	public ResponseEntity<String> deletePromozione(@PathVariable("idPromozione") Long idPromozione)
+	public ResponseEntity<?> deletePromozione(@PathVariable("idPromozione") Long idPromozione)
 	{
 		try {
 			 promozioniService.deletePromozione(idPromozione);
 
 		
-			return  new ResponseEntity<>("PROMOZIONE RIMOSSA",HttpStatus.OK);
+			//return  new ResponseEntity<>("PROMOZIONE RIMOSSA",HttpStatus.OK);
+			return  new ResponseEntity<>(new Messaggio("PROMOZIONE RIMOSSA"),HttpStatus.OK);
 		} catch (NotFoundException e) {
 			// TODO: handle exception
-			return  new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+			//return  new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+			return  new ResponseEntity<>(new Messaggio(e.getMessage()),HttpStatus.BAD_REQUEST);
 		}
 	}
 	
@@ -92,7 +99,8 @@ public class PromozioniController {
 			return new ResponseEntity<List<Promozione>>(promozioniService.getPromozioniFiltrate(categoriaMerceologica),HttpStatus.OK);
 		} catch (NotFoundException e) {
 			// TODO Auto-generated catch block
-			return  new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+			//return  new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+			return  new ResponseEntity<>(new Messaggio(e.getMessage()),HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -106,7 +114,8 @@ public class PromozioniController {
 			return new ResponseEntity<List<Promozione>>(promozioniService.getPromozioniCommerciante(emailCommerciante),HttpStatus.OK);
 		} catch (NotFoundException e) {
 			// TODO Auto-generated catch block
-			return  new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+		//	return  new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+			return  new ResponseEntity<>(new Messaggio(e.getMessage()),HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -122,18 +131,21 @@ public class PromozioniController {
 /*
 	@PutMapping(value = "/modificaPromozione/{idPromozione}/{descrizione}/{dataInizio}/{dataFine}")
 	@PreAuthorize("hasRole('COMMERCIANTE')")
-	public ResponseEntity<String> modificaPromozione(@PathVariable(name ="idPromozione", required =false) Long idPromozione, @PathVariable(name = "descrizione",required=false)String descrizione,@PathVariable(name = "dataInizio",required=false) Date dataInizio,@PathVariable(name="dataFine",required=false) Date dataFine) {
+	public ResponseEntity<?> modificaPromozione(@PathVariable(name ="idPromozione", required =false) Long idPromozione, @PathVariable(name = "descrizione",required=false)String descrizione,@PathVariable(name = "dataInizio",required=false) Date dataInizio,@PathVariable(name="dataFine",required=false) Date dataFine) {
 		// TODO Auto-generated method stub
 		 try {
 			promozioniService.modificaPromozione(idPromozione, descrizione, dataInizio, dataFine);
-			return  new ResponseEntity<>("PROMOZIONE MODIFICATA",HttpStatus.OK);
+			//return  new ResponseEntity<>("PROMOZIONE MODIFICATA",HttpStatus.OK);
+			return  new ResponseEntity<>(new Messaggio("PROMOZIONE MODIFICATA"),HttpStatus.OK);
 		} catch (IllegalArgumentException e) {
 			// TODO Auto-generated catch block
-			return  new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+			//return  new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+			return  new ResponseEntity<>(new Messaggio(e.getMessage()),HttpStatus.BAD_REQUEST);
 			
 		} catch (NotFoundException e) {
 			// TODO Auto-generated catch block
-			return  new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+			//return  new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+			return  new ResponseEntity<>(new Messaggio(e.getMessage()),HttpStatus.BAD_REQUEST);
 			
 		}
 	}

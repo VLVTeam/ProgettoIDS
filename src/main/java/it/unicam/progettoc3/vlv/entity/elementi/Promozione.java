@@ -18,6 +18,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import it.unicam.progettoc3.vlv.entity.utenti.Commerciante;
 @Entity
@@ -95,6 +96,7 @@ public void setDataFine(Date dataFine) {
 }
 
 
+@JsonIgnore
 public Long getIdCommerciante(){
 	return commerciante.getId();
 }

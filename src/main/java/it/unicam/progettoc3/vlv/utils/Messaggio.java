@@ -1,4 +1,4 @@
-package it.unicam.progettoc3.vlv.security.utils;
+package it.unicam.progettoc3.vlv.utils;
 
 public class Messaggio {
 

@@ -33,12 +33,13 @@ import it.unicam.progettoc3.vlv.entity.elementi.PuntoDiRitiro;
 import it.unicam.progettoc3.vlv.entity.utenti.Cliente;
 import it.unicam.progettoc3.vlv.entity.utenti.Commerciante;
 import it.unicam.progettoc3.vlv.service.OrdiniService;
+import it.unicam.progettoc3.vlv.utils.Messaggio;
 import javassist.NotFoundException;
 
 
 @RestController
 @RequestMapping("/gestoreOrdini")
-@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin(origins = "http://localhost:4200")
 public class OrdiniController {
 
 	
@@ -48,21 +49,24 @@ public class OrdiniController {
 	@PreAuthorize("hasRole('COMMERCIANTE')")
 	@PostMapping(value= "/addOrdine")
 	
-	public ResponseEntity<String> addOrdine(@Valid @RequestBody NuovoOrdine ordine , BindingResult bindingResult ,  Authentication authentication) {
+	public ResponseEntity<?> addOrdine(@Valid @RequestBody NuovoOrdine ordine , BindingResult bindingResult ,  Authentication authentication) {
 		// TODO Auto-generated method stub
 		if(bindingResult.hasErrors())
-			return new ResponseEntity<String>("controlla campi" , HttpStatus.BAD_REQUEST);
-		
+		//	return new ResponseEntity<String>("controlla campi" , HttpStatus.BAD_REQUEST);
+		return  new ResponseEntity<>(new Messaggio("controlla campi"),HttpStatus.BAD_REQUEST);
 		
 		String emailCommerciante=authentication.getName();
 		try {
 			ordiniService.addOrdine(ordine,emailCommerciante);
-			return  new ResponseEntity<>("ORDINE AGGIUNTO",HttpStatus.OK);
+			//return  new ResponseEntity<>("ORDINE AGGIUNTO",HttpStatus.OK);
+			return  new ResponseEntity<>(new Messaggio("ORDINE AGGIUNTO"),HttpStatus.OK);
 		} catch (IllegalArgumentException e) {
 			// TODO: handle exception
-			return  new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+			//return  new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+			return  new ResponseEntity<>(new Messaggio(e.getMessage()),HttpStatus.BAD_REQUEST);
 		}catch (NotFoundException e){
-			return  new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+			//return  new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+			return  new ResponseEntity<>(new Messaggio(e.getMessage()),HttpStatus.BAD_REQUEST);
 		}
 		
 	}
@@ -70,7 +74,7 @@ public class OrdiniController {
 	
 	
 	@PreAuthorize("hasRole('CLIENTE')")
-	@GetMapping(value = "/getOrdini")
+	@GetMapping(value = "/getOrdiniCliente")
 	//@RequestParam String emailCliente
 	public ResponseEntity<?> getOrdiniCliente(Authentication authentication) {
 		// TODO Auto-generated method stub
@@ -82,30 +86,57 @@ public class OrdiniController {
 		} catch (IllegalArgumentException e) {
 			// TODO: handle exception
 			
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			//return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return  new ResponseEntity<>(new Messaggio(e.getMessage()),HttpStatus.BAD_REQUEST);
 		}catch(NotFoundException e){
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			//return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return  new ResponseEntity<>(new Messaggio(e.getMessage()),HttpStatus.BAD_REQUEST);
 		}
 		
 	}
 
 	
+	@PreAuthorize("hasRole('COMMERCIANTE')")
+	@GetMapping(value = "/getOrdiniCommerciante")
+	//@RequestParam String emailCliente
+	public ResponseEntity<?> getOrdiniCommerciante(Authentication authentication) {
+		// TODO Auto-generated method stub
+		 
+		String emailCommerciante=authentication.getName();
+		try {
+			//return  ordiniService.getOrdiniCliente(idCliente);
+			return new ResponseEntity<List<Ordine>>(ordiniService.getOrdiniCommerciante(emailCommerciante), HttpStatus.OK);
+		} catch (IllegalArgumentException e) {
+			// TODO: handle exception
+			
+			//return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return  new ResponseEntity<>(new Messaggio(e.getMessage()),HttpStatus.BAD_REQUEST);
+		}catch(NotFoundException e){
+			//return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return  new ResponseEntity<>(new Messaggio(e.getMessage()),HttpStatus.BAD_REQUEST);
+		}
+		
+	}
+	
 	@PreAuthorize("hasRole('CLIENTE')")
 	@PutMapping(value = "/ritiraOrdine/{idOrdine}/{codiceRitiro}")
-	public ResponseEntity<String> ritiraOrdine(@PathVariable("idOrdine") Long idOrdine , @PathVariable("codiceRitiro")  String codiceRitiro ) {
+	public ResponseEntity<?> ritiraOrdine(@PathVariable("idOrdine") Long idOrdine , @PathVariable("codiceRitiro")  String codiceRitiro ) {
 		// TODO Auto-generated method stub
 		
 		try {
 			
 			 
 					ordiniService.ritiraOrdine(idOrdine , codiceRitiro);
-					 return new ResponseEntity<>("ORDINE RITIRATO",HttpStatus.OK);
+					 //return new ResponseEntity<>("ORDINE RITIRATO",HttpStatus.OK);
+					 return  new ResponseEntity<>(new Messaggio("ORDINE RITIRATO"),HttpStatus.OK);
 			
 		} catch (IllegalArgumentException e) {
 			// TODO: handle exception
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			//return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return  new ResponseEntity<>(new Messaggio(e.getMessage()),HttpStatus.BAD_REQUEST);
 		}catch(NotFoundException e){
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			//return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return  new ResponseEntity<>(new Messaggio(e.getMessage()),HttpStatus.BAD_REQUEST);
 		}
 		
 	}
@@ -131,9 +162,11 @@ public class OrdiniController {
 			return new ResponseEntity<List<Ordine>>(ordiniService.getOrdiniDaRitirare(emailCorriere), HttpStatus.OK);
 		} catch (IllegalArgumentException e) {
 			// TODO: handle exception
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			//return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return  new ResponseEntity<>(new Messaggio(e.getMessage()),HttpStatus.BAD_REQUEST);
 		}catch(NotFoundException e){
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			//return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return  new ResponseEntity<>(new Messaggio(e.getMessage()),HttpStatus.BAD_REQUEST);
 		}
 		
 	}
@@ -149,15 +182,17 @@ public class OrdiniController {
 			return new ResponseEntity<List<Ordine>>(ordiniService.getOrdiniInTransito(emailCorriere), HttpStatus.OK);
 		} catch (IllegalArgumentException e) {
 			// TODO: handle exception
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			//return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return  new ResponseEntity<>(new Messaggio(e.getMessage()),HttpStatus.BAD_REQUEST);
 		}catch(NotFoundException e){
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			//return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return  new ResponseEntity<>(new Messaggio(e.getMessage()),HttpStatus.BAD_REQUEST);
 		}
 	}
 
 	@PreAuthorize("hasRole('CORRIERE')")
 	@PutMapping(value = "/setPresaInCaricoOrdine/{idOrdine}/{dataPrevistaRitiro}")
-	public ResponseEntity<String> setPresaInCaricoOrdine(@PathVariable("idOrdine") Long idOrdine,@PathVariable("dataPrevistaRitiro")   String dataPrevistaRitiro ,   Authentication authentication) {
+	public ResponseEntity<?> setPresaInCaricoOrdine(@PathVariable("idOrdine") Long idOrdine,@PathVariable("dataPrevistaRitiro")   String dataPrevistaRitiro ,   Authentication authentication) {
 		
 	// TODO Auto-generated method stub
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -167,15 +202,19 @@ public class OrdiniController {
 		try {
 			Date data = format.parse(dataPrevistaRitiro);
 					 ordiniService.setPresaInCaricoOrdine(idOrdine,  data,emailCorriere);
-					 return new ResponseEntity<>("ORDINE PRESO IN CARICO", HttpStatus.BAD_REQUEST);
+					// return new ResponseEntity<>("ORDINE PRESO IN CARICO", HttpStatus.OK);
+					 return  new ResponseEntity<>(new Messaggio("ORDINE PRESO IN CARICO"),HttpStatus.OK);
 		} catch (IllegalArgumentException e) {
 			// TODO: handle exception
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			//return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return  new ResponseEntity<>(new Messaggio(e.getMessage()),HttpStatus.BAD_REQUEST);
 		}catch(NotFoundException e){
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return  new ResponseEntity<>(new Messaggio(e.getMessage()),HttpStatus.BAD_REQUEST);
+			//return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
-			return new ResponseEntity<>("CONTROLLARE DATA", HttpStatus.BAD_REQUEST);
+			return  new ResponseEntity<>(new Messaggio("CONTROLLA DATA"),HttpStatus.BAD_REQUEST);
+			//return new ResponseEntity<>("CONTROLLARE DATA", HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -184,22 +223,26 @@ public class OrdiniController {
 	@PreAuthorize("hasRole('CORRIERE')")
 	@PutMapping(value = "/setDataConsegnaPrevista/{idOrdine}/{dataConsegnaPrevista}")
 	
-	public ResponseEntity<String> setDataConsegnaPrevista(@PathVariable("idOrdine") Long idOrdine,@PathVariable("dataConsegnaPrevista")   String dataConsegnaPrevista ) {
+	public ResponseEntity<?> setDataConsegnaPrevista(@PathVariable("idOrdine") Long idOrdine,@PathVariable("dataConsegnaPrevista")   String dataConsegnaPrevista ) {
 		// TODO Auto-generated method stub
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		
 		try {
 			Date data = format.parse(dataConsegnaPrevista);
 			 ordiniService.setDataConsegnaPrevista(idOrdine, data);
-			 return new ResponseEntity<>("DATA CONSEGNA PREVISTA IMPOSTATA", HttpStatus.BAD_REQUEST);
+			// return new ResponseEntity<>("DATA CONSEGNA PREVISTA IMPOSTATA", HttpStatus.OK);
+			 return  new ResponseEntity<>(new Messaggio("DATA CONSEGNA PREVISTA IMPOSTATA"),HttpStatus.OK);
 } catch (IllegalArgumentException e) {
 	// TODO: handle exception
-	return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+	//return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+	return  new ResponseEntity<>(new Messaggio(e.getMessage()),HttpStatus.BAD_REQUEST);
 }catch(NotFoundException e){
-	return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+	//return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+	return  new ResponseEntity<>(new Messaggio(e.getMessage()),HttpStatus.BAD_REQUEST);
 } catch (ParseException e) {
 	// TODO Auto-generated catch block
-	return new ResponseEntity<>("CONTROLLARE DATA", HttpStatus.BAD_REQUEST);
+	//return new ResponseEntity<>("CONTROLLARE DATA", HttpStatus.BAD_REQUEST);
+	return  new ResponseEntity<>(new Messaggio("CONTROLLARE DATA"),HttpStatus.BAD_REQUEST);
 }
 	}
 	
@@ -207,18 +250,21 @@ public class OrdiniController {
 	@PreAuthorize("hasRole('CORRIERE')")
 	@PutMapping(value = "/setOrdineConsegnato/{idOrdine}")
 	
-	public ResponseEntity<String> setOrdineConsegnato(@PathVariable("idOrdine") Long idOrdine ) {
+	public ResponseEntity<?> setOrdineConsegnato(@PathVariable("idOrdine") Long idOrdine ) {
 		// TODO Auto-generated method stub
 		
 		try {
 			 ordiniService.setOrdineConsegnato(idOrdine);
 			
-			 return new ResponseEntity<>("ORDINE CONSEGNATO", HttpStatus.BAD_REQUEST);
+			 //return new ResponseEntity<>("ORDINE CONSEGNATO", HttpStatus.OK);
+			 return  new ResponseEntity<>(new Messaggio("ORDINE CONSEGNATO"),HttpStatus.OK);
 } catch (IllegalArgumentException e) {
 	// TODO: handle exception
-	return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+	//return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+	return  new ResponseEntity<>(new Messaggio(e.getMessage()),HttpStatus.BAD_REQUEST);
 }catch(NotFoundException e){
-	return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+	//return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+	return  new ResponseEntity<>(new Messaggio(e.getMessage()),HttpStatus.BAD_REQUEST);
 }
 		
 	}
@@ -226,19 +272,22 @@ public class OrdiniController {
 	@PreAuthorize("hasRole('CORRIERE')")
 	@PutMapping(value = "/setOrdineProntoPerIlRitiro/{idOrdine}")
 	
-	public ResponseEntity<String> setOrdineProntoPerIlRitiro(@PathVariable("idOrdine") Long idOrdine) {
+	public ResponseEntity<?> setOrdineProntoPerIlRitiro(@PathVariable("idOrdine") Long idOrdine) {
 		// TODO Auto-generated method stub
 		
 		try {
 			
 			 ordiniService.setOrdineProntoPerIlRitiro(idOrdine);
 			 		
-			 return new ResponseEntity<>("ORDINE DEPOSITATO PRESSO PUNTO DI RITIRO", HttpStatus.BAD_REQUEST);
+		//	 return new ResponseEntity<>("ORDINE DEPOSITATO PRESSO PUNTO DI RITIRO", HttpStatus.OK);
+			 return  new ResponseEntity<>(new Messaggio("ORDINE DEPOSITATO PRESSO PUNTO DI RITIRO"),HttpStatus.OK);
 } catch (IllegalArgumentException e) {
 	// TODO: handle exception
-	return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+	//return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+	return  new ResponseEntity<>(new Messaggio(e.getMessage()),HttpStatus.BAD_REQUEST);
 }catch(NotFoundException e){
-	return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+	//return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+	return  new ResponseEntity<>(new Messaggio(e.getMessage()),HttpStatus.BAD_REQUEST);
 }
 		
 	}
@@ -253,7 +302,8 @@ public class OrdiniController {
 			 
 		} catch (NotFoundException e) {
 			// TODO: handle exception
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			//return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return  new ResponseEntity<>(new Messaggio(e.getMessage()),HttpStatus.BAD_REQUEST);
 		}
 	}
 	
@@ -268,7 +318,8 @@ public class OrdiniController {
 			 
 		} catch (NotFoundException e) {
 			// TODO: handle exception
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			//return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return  new ResponseEntity<>(new Messaggio(e.getMessage()),HttpStatus.BAD_REQUEST);
 		}
 	}
 	
@@ -283,7 +334,8 @@ public class OrdiniController {
 			 
 		} catch (NotFoundException e) {
 			// TODO: handle exception
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			//return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return  new ResponseEntity<>(new Messaggio(e.getMessage()),HttpStatus.BAD_REQUEST);
 		}
 	}
 	

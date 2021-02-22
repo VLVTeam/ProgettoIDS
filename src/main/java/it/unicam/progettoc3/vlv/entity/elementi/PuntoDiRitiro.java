@@ -24,56 +24,60 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity(name = "punto_di_ritiro")
 @Table(name = "punto_di_ritiro")
+/**
+ * classe model relativa al punto di ritiro, si limita a fornire i getter e i setter piu' importanti
+ * per il fine ultimo del progetto.
+ */
 public class PuntoDiRitiro {
 	
-@Id
-@GeneratedValue(strategy = GenerationType.IDENTITY)	
-private Long ID;
-
-@NotBlank
-@NotNull
-@Column(nullable = false)
-private String indirizzo;
-
-@JsonIgnore
-@JsonManagedReference(value="punto-ordine")
-@OnDelete(action = OnDeleteAction.CASCADE)
-@OneToMany(  fetch = FetchType.LAZY , cascade = CascadeType.ALL , mappedBy="puntoDiRitiro"  , orphanRemoval=true)
-List<Ordine> ordini ;
-
-
-public PuntoDiRitiro(){}
-public PuntoDiRitiro(String indirizzo) {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)	
+	private Long ID;
 	
-	this.indirizzo = indirizzo;
-}
-
-
-public Long getID() {
-	return ID;
-}
-
-
-
-
-public String getIndirizzo() {
-	return indirizzo;
-}
-
-@JsonIgnore
-public List<Ordine> getOrdini() {
-	return ordini;
-}
-
-public void setOrdini(List<Ordine> ordini) {
-	this.ordini = ordini;
-}
-public void setID(Long iD) {
-	ID = iD;
-}
-public void setIndirizzo(String indirizzo) {
-	this.indirizzo = indirizzo;
-}
+	@NotBlank
+	@NotNull
+	@Column(nullable = false)
+	private String indirizzo;
+	
+	@JsonIgnore
+	@JsonManagedReference(value="punto-ordine")
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	@OneToMany(  fetch = FetchType.LAZY , cascade = CascadeType.ALL , mappedBy="puntoDiRitiro"  , orphanRemoval=true)
+	List<Ordine> ordini ;
+	
+	
+	public PuntoDiRitiro(){}
+	public PuntoDiRitiro(String indirizzo) {
+		
+		this.indirizzo = indirizzo;
+	}
+	
+	
+	public Long getID() {
+		return ID;
+	}
+	
+	
+	
+	
+	public String getIndirizzo() {
+		return indirizzo;
+	}
+	
+	@JsonIgnore
+	public List<Ordine> getOrdini() {
+		return ordini;
+	}
+	
+	public void setOrdini(List<Ordine> ordini) {
+		this.ordini = ordini;
+	}
+	public void setID(Long iD) {
+		ID = iD;
+	}
+	public void setIndirizzo(String indirizzo) {
+		this.indirizzo = indirizzo;
+	}
 
 
 

@@ -19,23 +19,21 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
+/**
+ * classe astratta dedicata al ruolo, ed estesa da tutte le classi relative ai possibili utenti: Amministratore, Cliente, Commerciante e Corriere.
+ * Questa classe astratta serve a collegare il ruolo definito nell'utente, alla classe dedicata proprio al ruolo definito, che corrisponde ad uno dei
+ * possibili utenti appena citati, fornisce inoltre l'id.
+ * 
+ * Attraverso l'uso di questa interfaccia, viene sviluppato il design pattern 'Bridge'. Infatti questa astrazione permette di separare 
+ * il set di classi strettamente correlate relative a tutti gli utenti in 2 gerarchie separate: astrazione('Ruolo') e 
+ * implementazione ('Amministratore', 'Cliente', 'Commerciante', 'Corriere')
+ */
 public abstract class Ruolo {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
- private Long id ;
+	protected Long id ;
 	
-	/*
-	@NotNull
-	@Enumerated(EnumType.STRING)
- private NomiRuoli nomeRuolo;
-*/
-	
-	/*
-	@ManyToOne(cascade = CascadeType.ALL , fetch = FetchType.LAZY  )
-	@JsonBackReference
-	private Utente utente;
-	*/
 	@JsonBackReference
 	@OneToOne(cascade = CascadeType.ALL , optional = false , mappedBy= "associato" , fetch = FetchType.LAZY)
 	Utente utente ;
@@ -43,16 +41,6 @@ public abstract class Ruolo {
 	public Ruolo() {
 		
 	}
-/*
-	public Ruolo( @NotNull NomiRuoli nomeRuolo) {
-		
-		
-		this.nomeRuolo = nomeRuolo;
-		setStatoUtente(nomeRuolo);
-		
-		
-	}
-	*/
 
 	public Long getId() {
 		return id;
@@ -61,15 +49,7 @@ public abstract class Ruolo {
 	public void setId(Long id) {
 		this.id = id;
 	}
-/*
-	public NomiRuoli getNomeRuolo() {
-		return nomeRuolo;
-	}
 
-	public void setNomeRuolo(NomiRuoli nomeRuolo) {
-		this.nomeRuolo = nomeRuolo;
-	}
-	*/
 
 	public Utente getUtente() {
 		return utente;
@@ -77,7 +57,6 @@ public abstract class Ruolo {
 
 	public void setUtente(Utente utente) {
 		this.utente = utente;
-		//setStatoUtente(nomeRuolo);
 	}
 	
 	
@@ -86,14 +65,5 @@ public abstract class Ruolo {
 		return utente.getId();
 		else return null;
 	}
-	/*
-	public void setStatoUtente(NomiRuoli nomeRuolo)
-	{
-		if(this.utente!=null){
-			if(nomeRuolo== NomiRuoli.ROLE_COMMERCIANTE || nomeRuolo == NomiRuoli.ROLE_CORRIERE) 
-				this.utente.setStato(false);
-			}
-	}
-	*/
 	
 }

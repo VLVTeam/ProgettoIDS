@@ -1,110 +1,29 @@
 package it.unicam.progettoc3.vlv.entity.dto;
 
-
-
-
-
-
-
-
+/**
+ * La classe NuovoOrdine ha la parte piu' grezza (getter e setter) delle funzionalita' della classe Ordine, le due permettono di istanziare
+ * due oggetti quasi equivalenti per quanto riguarda gli attributi interessanti da mostrare sulla piattaforma.
+ * Questa classe è stata aggiunta per permettere di restituire un oggetto ordine, ma appunto solo con codiceRitiro, descrizione, id cliente
+ * e id punto di ritiro
+ */
 public class NuovoOrdine{
 
 	
-
-
-
-	//private Long ID;
-
-	
 	private String codiceRitiro;
-
+	
 	private String descrizione;
 
 
-	//private StatiOrdine stato;
-
-	
-
 	private Long idCliente;
 	
-	//private Long idCorriere;
 
-	
 	private Long idPuntoDiRitiro;
 
-	
-	
-	
 
-	
-	//private Date dataCreazione;
-
-	
-	//private Date dataRitiro;
-
-	
-	//private Date dataConsegnaPrevista;
-	
-	
-	
-	
-	
 	public NuovoOrdine() {
 		// TODO Auto-generated constructor stub
 	}
-/*
-	public OrdineRiferimento(String codiceRitiro, String descrizione,StatiOrdine stato,  Long idCliente,  Long idPuntoDiRitiro ) {
-		// TODO Auto-generated constructor stub
-		
-		this.codiceRitiro=codiceRitiro;
-		this.descrizione=descrizione;
-		this.stato=stato;
-		
-		this.idCliente=idCliente;
-		this.idCorriere=null;
-		this.idPuntoDiRitiro=idPuntoDiRitiro;
-		this.dataCreazione=new Date();
-		this.dataRitiro=null;
-		this.dataConsegnaPrevista=null;
-	}
-
 	
-	public OrdineRiferimento(String codiceRitiro, String descrizione,StatiOrdine stato, Long idCliente ) {
-		// TODO Auto-generated constructor stub
-		
-		this.codiceRitiro=codiceRitiro;
-		this.descrizione=descrizione;
-		this.stato=stato;
-		this.idCliente=idCliente;
-		this.idCorriere=null;
-		this.idPuntoDiRitiro=null;
-		this.dataCreazione=new Date();
-		this.dataRitiro=null;
-		this.dataConsegnaPrevista=null;
-	}
-	
-	*/
-	/*
-	public OrdineRiferimento(Long id ,String codiceRitiro, String descrizione,StatiOrdine stato,  Long idCliente, Long idCorriere,  Long idPuntoDiRitiro,Date dataCreazione ,Date dataRitiro , Date dataConsegnaPrevista ) {
-		// TODO Auto-generated constructor stub
-		this.ID=id;
-		this.codiceRitiro=codiceRitiro;
-		this.descrizione=descrizione;
-		this.stato=stato;
-		
-		this.idCliente=idCliente;
-		this.idCorriere=idCorriere;
-		this.idPuntoDiRitiro=idPuntoDiRitiro;
-		this.dataCreazione=dataCreazione;
-		this.dataRitiro=dataRitiro;
-		this.dataConsegnaPrevista=dataConsegnaPrevista;
-	}
-*/
-	/*
-	public Long getID() {
-		return ID;
-	}
-*/
 	public String getCodiceRitiro() {
 		return codiceRitiro;
 	}
@@ -113,36 +32,22 @@ public class NuovoOrdine{
 		return descrizione;
 	}
 
-
-/*
-	public Long getIdCorriere() {
-		return idCorriere;
-	}
-*/
 	public Long getIdPuntoDiRitiro() {
 		return idPuntoDiRitiro;
 	}
-/*
-	public StatiOrdine getStato() {
-		return stato;
-	}
-*/
+
 	public Long getIdCliente() {
 		return idCliente;
 	}
-/*
-	public Date getDataCreazione() {
-		return dataCreazione;
-	}
 
-	public Date getDataRitiro() {
-		return dataRitiro;
+	public NuovoOrdine(String codiceRitiro, String descrizione, Long idCliente, Long idPuntoDiRitiro) {
+		super();
+		this.codiceRitiro = codiceRitiro;
+		this.descrizione = descrizione;
+		this.idCliente = idCliente;
+		this.idPuntoDiRitiro = idPuntoDiRitiro;
 	}
-
-	public Date getDataConsegnaPrevista() {
-		return dataConsegnaPrevista;
-	}
-
-	*/
+	
+	
 	
 }

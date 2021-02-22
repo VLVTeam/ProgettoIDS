@@ -11,6 +11,10 @@ import it.unicam.progettoc3.vlv.repository.UtenteRepository;
 
 @Service
 @Transactional
+/**
+ * La classe UtenteService definisce i metodi per cercare un utente partendo da una email, per cercare la sua esistenza partendo da una email oppure
+ * per salvare un utente nella repository utente
+ */
 public class UtenteService {
 
 	

@@ -11,24 +11,23 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import it.unicam.progettoc3.vlv.entity.utenti.Utente;
 
-
-
-
+/**
+ * Questa classe implementa UserDetails ed ha la responsabilita' di rappresentare un Utente con la lista delle autorizzazioni.
+ * La lista delle autorizzazioni derivano dalla conversione dei ruoli dell'Utente nella classe relativa Ruolo.
+ */
 
 @SuppressWarnings("serial")
 
 public class UtentePrincipale implements UserDetails {
 
 	private String email;
+	
 	private String password;
 	
 	private Collection<? extends GrantedAuthority> authorities;
 
-	
 	private boolean stato;
-
 	
-
 	public UtentePrincipale(String email, String password,boolean stato, Collection<? extends GrantedAuthority> authorities) {
 		super();
 		this.email = email;
@@ -37,14 +36,14 @@ public class UtentePrincipale implements UserDetails {
 		this.authorities = authorities;
 	}
 
- public static  UtentePrincipale build(Utente utente)
- {
+	
+	public static UtentePrincipale build(Utente utente)
+	{
 	 List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>() ;
-		//	utente.getRuoli().stream().map(Ruolo -> new SimpleGrantedAuthority(Ruolo.getNomeRuolo().name())).collect(Collectors.toList());
 			authorities.add(new SimpleGrantedAuthority( utente.getNomeRuolo().name()));
 			
 	 return new UtentePrincipale(utente.getEmail(), utente.getPassword(),utente.isStato(), authorities);
- };
+	};
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

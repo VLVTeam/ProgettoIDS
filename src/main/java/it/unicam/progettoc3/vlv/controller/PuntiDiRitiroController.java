@@ -26,39 +26,46 @@ import javassist.NotFoundException;
 @RestController
 @RequestMapping("/gestorePuntiDiRitiro")
 @CrossOrigin(origins = "http://localhost:4200")
+/**
+ *  Questa classe definisce tutti i metodi relativi
+ *  ai punti di ritiro e, attraverso la loro invocazione, delega la loro precisa esecuzione alla classe service
+ *  corrispondente.
+ */
 public class PuntiDiRitiroController  {
 
+	// collegamento alla classe service corrispondente
 	@Autowired
 	PuntiDiRitiroService puntiDiRitiroService;
 	
 	@PostMapping(value="/addPuntoDiRitiro")
 	@PreAuthorize("hasRole('AMMINISTRATORE')")
+	/** metodo per aggiungere un punto di ritiro alla lista dei punti di ritiro, attraverso la classe 'PuntiDiRitiroService' */
 	public ResponseEntity<?> addPuntoDiRitiro(@Valid @RequestBody PuntoDiRitiro puntoDiRitiro , BindingResult bindingResult) {
 		// TODO Auto-generated method stub
 		if(bindingResult.hasErrors())
-			return new ResponseEntity<>(new Messaggio("controlla campi"),HttpStatus.BAD_REQUEST);
-			//return new ResponseEntity<String>("controlla campi" , HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(new Messaggio("controlla campi") , HttpStatus.BAD_REQUEST);
 		 puntiDiRitiroService.addPuntoDiRitiro(puntoDiRitiro);
 		 return new ResponseEntity<>(new Messaggio("PUNTO DI RITIRO AGGIUNTO"),HttpStatus.OK);
-		// return new ResponseEntity<>("PUNTO DI RITIRO AGGIUNTO",HttpStatus.OK);
 	}
 
+	
 	@DeleteMapping(value="/deletePuntoDiRitiro/{idPuntoDiRitiro}")
 	@PreAuthorize("hasRole('AMMINISTRATORE')")
+	/** metodo per eliminare, se esiste, un punto di ritiro, attraverso la classe 'PuntiDiRitiroService' */
 	public ResponseEntity<?> deletePuntoDiRitiro(@PathVariable("idPuntoDiRitiro") Long idPuntoDiRitiro) {
 		// TODO Auto-generated method stub
 		 try {
 			puntiDiRitiroService.deletePuntoDiRitiro(idPuntoDiRitiro);
-			//return new ResponseEntity<>("PUNTO DI RITIRO RIMOSSO",HttpStatus.OK);
-			 return new ResponseEntity<>(new Messaggio("PUNTO DI RITIRO ELIMINATO"),HttpStatus.OK);
+			return new ResponseEntity<>(new Messaggio("PUNTO DI RITIRO RIMOSSO"),HttpStatus.OK);
 		} catch (NotFoundException e) {
 			// TODO Auto-generated catch block
-			//return  new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);		}
 			return  new ResponseEntity<>(new Messaggio(e.getMessage()),HttpStatus.BAD_REQUEST);		}
+		 
 	}
 
 	@GetMapping(value="/getPuntiDiRitiro")
 	@PreAuthorize("hasRole('COMMERCIANTE') OR hasRole('AMMINISTRATORE')")
+	/** metodo che restituisce la lista di tutti i punti di ritiro presenti, attraverso la classe 'PuntiDiRitiroService' */
 	public ResponseEntity<List<PuntoDiRitiro>> getPuntiDiRitiro() {
 		// TODO Auto-generated method stub
 		return  new ResponseEntity<List<PuntoDiRitiro>>(puntiDiRitiroService.getPuntiDiRitiro(), HttpStatus.OK);

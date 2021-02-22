@@ -30,6 +30,10 @@ import it.unicam.progettoc3.vlv.entity.utenti.Commerciante;
 import it.unicam.progettoc3.vlv.entity.utenti.Corriere;
 
 @Entity
+/**
+ * classe model relativa all'ordine, si limita a fornire i getter e i setter piu' importanti
+ * per il fine ultimo del progetto.
+ */
 public class Ordine {
 
 @Id
@@ -201,6 +205,5 @@ public PuntoDiRitiro getPuntoDiRitiro() {
 		this.dataCreazione = dataCreazione;
 	}
 
-	
 	
 }

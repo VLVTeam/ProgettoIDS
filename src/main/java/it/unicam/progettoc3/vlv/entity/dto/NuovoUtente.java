@@ -1,10 +1,16 @@
 package it.unicam.progettoc3.vlv.entity.dto;
 
 
-
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
+import com.sun.istack.NotNull;
+
+/**
+ * La classe NuovoUtente ha la parte piu' grezza (getter e setter) delle funzionalita' della classe Utente, le due permettono di istanziare
+ * due oggetti quasi equivalenti per quanto riguarda gli attributi interessanti da mostrare sulla piattaforma.
+ * Questa classe è stata aggiunta per permettere di restituire e/o modificare un oggetto utente, ma appunto solo con email e password
+ */
 public class NuovoUtente {
 
 	@Email
@@ -12,8 +18,6 @@ public class NuovoUtente {
 	@NotBlank
 	public String password;
 	
-	//private Set<String> ruoli = new HashSet<>();
-
 	public String getEmail() {
 		return email;
 	}
@@ -29,16 +33,15 @@ public class NuovoUtente {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-/*
-	public Set<String> getRuoli() {
-		return ruoli;
-	}
 
-	public void setRuoli(Set<String> ruoli) {
-		this.ruoli = ruoli;
-	}
-	
-	*/
 	
 	public NuovoUtente(){}
+	
+	
+	public NuovoUtente(@NotNull @NotBlank @Email String email, @NotNull @NotBlank String password) {
+		this.email = email;
+		this.password = password;
+	}
+	
+	
 }

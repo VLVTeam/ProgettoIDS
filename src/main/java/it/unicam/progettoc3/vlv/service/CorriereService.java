@@ -20,6 +20,10 @@ import javassist.NotFoundException;
 
 @Service
 @Transactional
+/**
+ * La classe CorriereService definisce precisamente il funzionamento
+ * dei metodi presenti anche nella classe controller, fornendoli appunto alla classe CorriereController.
+ */
 public class CorriereService {
 
 	
@@ -28,18 +32,16 @@ public class CorriereService {
 	@Autowired
 	UtenteRepository utenteRepository;
 	
+	/** metodo per salvare un corriere nella repository */
 	public void save(Corriere corriere)
 	{
 		corriereRepository.save(corriere);
 	}
 	
 	
-	
-	
-	
-	
 	public void accettaIscrizioneCorriere(Long idCorriere) throws NotFoundException{
 		// TODO Auto-generated method stub
+		// se trova il commerciante attraverso l'id fornito, imposta lo stato della sua iscrizione a true, poi salva
 		Corriere corriere = corriereRepository.findById(idCorriere).orElseThrow(() -> new NotFoundException("CORRIERE NON TROVATO"));
 		Utente utente = corriere.getUtente();
 		if(utente == null) throw new NotFoundException("UTENTE NON TROVATO");
@@ -47,21 +49,24 @@ public class CorriereService {
 			utenteRepository.save(utente);
 	}
 
-	
-	
 
 	public List<Utente> getCorrieriDaAccettare() {
 		// TODO Auto-generated method stub
+		// crea una lista di utenti in cui inserisce tutti gli utenti
 		Iterable<Utente> iteratore =utenteRepository.findAll();
+		/*
+		 * ne crea un'altra in cui a mano a mano aggiunge solo gli utenti presenti nella prima lista creata, che hanno uno stato iscrizione 'false'
+		 * e un ruolo corrispondente al corriere
+		 */
 		List<Utente> corrieriDaAccettare = new ArrayList<>();
 		iteratore.forEach(Utente ->{
 			if(Utente.getNomeRuolo()==NomiRuoli.ROLE_CORRIERE && !Utente.isStato()) corrieriDaAccettare.add(Utente);
 		});
+		// restituisce la lista risultante, puo' essere null
 		if (corrieriDaAccettare.isEmpty()) return null;
 		return corrieriDaAccettare;
 	}
 
-	
 
 	public Corriere getCorriereByIdUtente(Long idUtente) throws  IllegalArgumentException,NotFoundException{
 		// TODO Auto-generated method stub
@@ -71,4 +76,6 @@ public class CorriereService {
 		if(corriere ==null) throw new NotFoundException("CORRIERE NON TROVATO");
 		return corriere;
 	}
+	
+	
 }

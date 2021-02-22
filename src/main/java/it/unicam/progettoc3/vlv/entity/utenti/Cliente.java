@@ -18,8 +18,12 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import it.unicam.progettoc3.vlv.entity.elementi.Ordine;
 
 @Entity
+/**
+ * classe model relativa al cliente, si limita ad estendere la classe astratta 'Ruolo' e a fornire 
+ * degli attributi relativi all'utente 'Cliente', come nome, cognome, indirizzo e lista di ordini eseguiti, con i getter e i setter piu' importanti
+ * per il fine ultimo del progetto.
+ */
 public class Cliente extends Ruolo {
-	
 	
 	
 	@Column(nullable = false)
@@ -34,23 +38,18 @@ public class Cliente extends Ruolo {
 	@NotNull
 	private String indirizzo;
 	
-	
 
 	@JsonManagedReference(value="cliente-ordine")
 	@OneToMany(fetch = FetchType.LAZY ,  cascade = CascadeType.ALL , mappedBy="cliente")
 	List<Ordine> ordini ;
 
-	
-	
-	
-	
+
 	public Cliente(){}
-	public Cliente(@NotNull String nome, @NotNull String cognome,@NotNull String indirizzo ) {
+	public Cliente(@NotNull String nome, @NotNull String cognome,@NotNull String indirizzo) {
 		
 		this.nome = nome;
 		this.cognome = cognome;
 		this.indirizzo = indirizzo;
-		
 		
 	}
 	
@@ -73,8 +72,6 @@ public class Cliente extends Ruolo {
 	public void setIndirizzo(String indirizzo) {
 		this.indirizzo = indirizzo;
 	}
-	
-	
 	public List<Ordine> getOrdini() {
 		return ordini;
 	}
@@ -82,7 +79,9 @@ public class Cliente extends Ruolo {
 		this.ordini = ordini;
 	}
 	
+	public Long getId() {
+		return id;
+	}
 	
-	
-	
+
 }

@@ -1,7 +1,15 @@
 package it.unicam.progettoc3.vlv.entity.dto;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
+import com.sun.istack.NotNull;
+
+/**
+ * La classe NuovoCliente ha la parte piu' grezza (getter e setter) delle funzionalita' della classe Cliente, le due permettono di istanziare
+ * due oggetti quasi equivalenti per quanto riguarda gli attributi interessanti da mostrare sulla piattaforma.
+ * Questa classe è stata aggiunta per permettere di restituire e/o modificare un oggetto cliente, ma appunto solo con nome, cognome e indirizzo
+ */
 public class NuovoCliente extends NuovoUtente {
 
 	@NotBlank
@@ -32,5 +40,19 @@ public class NuovoCliente extends NuovoUtente {
 	}
 	
 	
-	public NuovoCliente(){}
+	public NuovoCliente(){
+		super();
+	}
+	
+	
+	public NuovoCliente(@NotNull @NotBlank @Email String email, @NotNull @NotBlank String password,
+			@NotNull @NotBlank String nome, @NotNull @NotBlank String cognome, @NotNull @NotBlank String indirizzo){
+		super(email, password);
+		this.email = email;
+		this.password = password;
+		this.cognome = cognome;
+		this.nome = nome;
+		this.indirizzo = indirizzo;	
+	}
+	
 }

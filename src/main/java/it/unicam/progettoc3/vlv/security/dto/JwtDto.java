@@ -4,6 +4,10 @@ import java.util.Collection;
 
 import org.springframework.security.core.GrantedAuthority;
 
+/**
+ * classe dedicata al JWT (JSON Web Token). Questo token, ad ogni richiesta di autenticazione da parte di un client, deve venir generato, firmato e 
+ * restituito al client. Il cliente utilizzera' questo token per autenticare le successive richieste
+ */
 public class JwtDto {
 	
 	private String token ;
@@ -15,7 +19,9 @@ public class JwtDto {
 		this.token = token;
 		this.email = email;
 		this.authorities = authorities;
+		
 	}
+	
 	public String getToken() {
 		return token;
 	}
@@ -40,7 +46,6 @@ public class JwtDto {
 	public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
 		this.authorities = authorities;
 	}
-	
 	
 
 }

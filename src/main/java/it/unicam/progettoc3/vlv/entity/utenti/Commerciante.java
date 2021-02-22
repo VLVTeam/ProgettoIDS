@@ -23,10 +23,14 @@ import it.unicam.progettoc3.vlv.entity.enumeratori.CategorieMerceologiche;
 
 
 @Entity
+/**
+ * classe model relativa al commerciante, si limita ad estendere la classe astratta 'Ruolo' e a fornire 
+ * degli attributi relativi all'utente 'Commerciante', come categoria merceologica, indirizzo e nome punto vendita, lista di ordini
+ * e lista di promozioni collegate al commerciante. Tutto con i getter e i setter piu' importanti per il fine ultimo del progetto.
+ */
 public class Commerciante extends Ruolo  {
 	
-	
-	
+
 	@NotNull
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
@@ -39,13 +43,6 @@ public class Commerciante extends Ruolo  {
 	@NotNull
 	@Column(nullable = false)
 	private String nomePuntoVendita;
-	
-	
-	
-	
-	
-
-	
 	
 	
 	@JsonManagedReference(value="commerciante-ordine")
@@ -64,21 +61,11 @@ public class Commerciante extends Ruolo  {
 		this.indirizzoPuntoVendita = indirizzoPuntoVendita;
 		this.nomePuntoVendita = nomePuntoVendita;
 		
-		
-
 	}
-
-	
-
-
-	
-
 
 	public CategorieMerceologiche getCategoriaMerceologica() {
 		return categoriaMerceologica;
 	}
-
-
 
 
 	public String getIndirizzoPuntoVendita() {
@@ -95,8 +82,6 @@ public class Commerciante extends Ruolo  {
 		return nomePuntoVendita;
 	}
 	
-
-
 	
 	public void setCategoriaMerceologica(CategorieMerceologiche categoriaMerceologica) {
 		this.categoriaMerceologica = categoriaMerceologica;
@@ -118,6 +103,8 @@ public class Commerciante extends Ruolo  {
 		this.promozioni = promozioni;
 	}
 	
-	
+	public Long getId() {
+		return id;
+	}
 	
 }

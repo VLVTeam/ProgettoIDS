@@ -11,11 +11,14 @@ import it.unicam.progettoc3.vlv.security.entity.UtentePrincipale;
 import it.unicam.progettoc3.vlv.service.UtenteService;
 
 @Service
-public class UserDetailsServiceImpl   implements UserDetailsService{
+/**
+ * questa classe implementa l'interfaccia UserDetailsService e si occupa di caricare i dati relativi all'utente passato attraverso la sua email
+ */
+public class UserDetailsServiceImpl implements UserDetailsService{
 
+	// collegamento alla classe service di utente, per poter cercarlo tramite mail
 	@Autowired
 	UtenteService utenteService;
-	
 	
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {

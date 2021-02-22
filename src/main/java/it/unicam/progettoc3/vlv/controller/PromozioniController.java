@@ -34,122 +34,93 @@ import javassist.NotFoundException;
 @RestController
 @RequestMapping("/gestorePromozioni")
 @CrossOrigin(origins = "http://localhost:4200")
+/**
+ * Questa classe definisce tutti i metodi relativi
+ * alle promozioni e, attraverso la loro invocazione, delega la loro precisa esecuzione alla classe service
+ * corrispondente.
+ */
 public class PromozioniController {
 
+	// collegamento alla classe service corrispondente
 	@Autowired 
 	PromozioniService promozioniService;
-	
-	
-
 
 	@PostMapping(value = "/addPromozione")
 	@PreAuthorize("hasRole('COMMERCIANTE')")
+	/** metodo che aggiunge una promozione, nella lista delle promozioni, attraverso la classe 'PromozioniService' */
 	public ResponseEntity<?> addPromozione(@Valid @RequestBody NuovaPromozione promozione, BindingResult bindingResult , Authentication authentication) {
 		// TODO Auto-generated method stub
 		
 		if(bindingResult.hasErrors())
-			//return new ResponseEntity<String>("controlla campi" , HttpStatus.BAD_REQUEST);
-		return  new ResponseEntity<>(new Messaggio("controlla campi"),HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(new Messaggio("controlla campi") , HttpStatus.BAD_REQUEST);
 		
 		
 		String emailCommerciante=authentication.getName();
 		try {
-			 promozioniService.addPromozione(promozione,emailCommerciante);
-
-		
-			//return  new ResponseEntity<>("PROMOZIONE AGGIUNTA",HttpStatus.OK);
+			promozioniService.addPromozione(promozione,emailCommerciante);		
 			return  new ResponseEntity<>(new Messaggio("PROMOZIONE AGGIUNTA"),HttpStatus.OK);
 		} catch (IllegalArgumentException e) {
 			// TODO: handle exception
-			//return  new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
 			return  new ResponseEntity<>(new Messaggio(e.getMessage()),HttpStatus.BAD_REQUEST);
-	}catch(NotFoundException e){
-		//return  new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
-		return  new ResponseEntity<>(new Messaggio(e.getMessage()),HttpStatus.BAD_REQUEST);
+		}catch(NotFoundException e){
+			return  new ResponseEntity<>(new Messaggio(e.getMessage()),HttpStatus.BAD_REQUEST);
 		}
+		
 	}
 
-	
 	
 	@DeleteMapping(value = "/deletePromozione/{idPromozione}")
 	@PreAuthorize("hasRole('COMMERCIANTE')")
+	/** metodo che rimuove una promozione, se esiste, dalla lista delle promozioni, attraverso la classe 'PromozioniService' */
 	public ResponseEntity<?> deletePromozione(@PathVariable("idPromozione") Long idPromozione)
 	{
 		try {
-			 promozioniService.deletePromozione(idPromozione);
-
-		
-			//return  new ResponseEntity<>("PROMOZIONE RIMOSSA",HttpStatus.OK);
+			promozioniService.deletePromozione(idPromozione);
 			return  new ResponseEntity<>(new Messaggio("PROMOZIONE RIMOSSA"),HttpStatus.OK);
 		} catch (NotFoundException e) {
 			// TODO: handle exception
-			//return  new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
 			return  new ResponseEntity<>(new Messaggio(e.getMessage()),HttpStatus.BAD_REQUEST);
 		}
 	}
 	
 	
-	
-
 	@GetMapping(value = "/getPromozioniFiltrate/{categoriaMerceologica}")
 	@PreAuthorize("hasRole('CLIENTE')")
+	/** metodo che restituisce la lista di promozioni filtrate in base alla categoria merceologica inserita, attraverso la classe 'PromozioniService' */
 	public ResponseEntity<?> getPromozioniFiltrate(@PathVariable("categoriaMerceologica") CategorieMerceologiche categoriaMerceologica) {
 		// TODO Auto-generated method stub
 		try {
 			return new ResponseEntity<List<Promozione>>(promozioniService.getPromozioniFiltrate(categoriaMerceologica),HttpStatus.OK);
 		} catch (NotFoundException e) {
 			// TODO Auto-generated catch block
-			//return  new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
 			return  new ResponseEntity<>(new Messaggio(e.getMessage()),HttpStatus.BAD_REQUEST);
 		}
 	}
 
+	
 	@GetMapping(value = "/getPromozioniCommerciante")
 	@PreAuthorize("hasRole('COMMERCIANTE')")
+	/** metodo che restituisce la lista di promozioni relative ad uno specifico commerciante, attraverso la classe 'PromozioniService' */
 	public ResponseEntity<?> getPromozioniCommerciante(Authentication authentication) {
 		// TODO Auto-generated method stub
 		String emailCommerciante = authentication.getName();
 		try {
-			
 			return new ResponseEntity<List<Promozione>>(promozioniService.getPromozioniCommerciante(emailCommerciante),HttpStatus.OK);
 		} catch (NotFoundException e) {
 			// TODO Auto-generated catch block
-		//	return  new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
 			return  new ResponseEntity<>(new Messaggio(e.getMessage()),HttpStatus.BAD_REQUEST);
 		}
 	}
 
+	
 	@GetMapping(value = "/getPromozioniNonScadute")
 	@PreAuthorize("hasRole('CLIENTE')")
+	/** metodo che restituisce solo le promozioni non scadute, quindi attuali, attraverso la classe 'PromozioniService' */
 	public ResponseEntity<List<Promozione>> getPromozioniNonScadute() {
 		// TODO Auto-generated method stub
 		
 		return new ResponseEntity<List<Promozione>>(promozioniService.getPromozioniNonScadute(),HttpStatus.OK);
 	}
-
-
-/*
-	@PutMapping(value = "/modificaPromozione/{idPromozione}/{descrizione}/{dataInizio}/{dataFine}")
-	@PreAuthorize("hasRole('COMMERCIANTE')")
-	public ResponseEntity<?> modificaPromozione(@PathVariable(name ="idPromozione", required =false) Long idPromozione, @PathVariable(name = "descrizione",required=false)String descrizione,@PathVariable(name = "dataInizio",required=false) Date dataInizio,@PathVariable(name="dataFine",required=false) Date dataFine) {
-		// TODO Auto-generated method stub
-		 try {
-			promozioniService.modificaPromozione(idPromozione, descrizione, dataInizio, dataFine);
-			//return  new ResponseEntity<>("PROMOZIONE MODIFICATA",HttpStatus.OK);
-			return  new ResponseEntity<>(new Messaggio("PROMOZIONE MODIFICATA"),HttpStatus.OK);
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			//return  new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
-			return  new ResponseEntity<>(new Messaggio(e.getMessage()),HttpStatus.BAD_REQUEST);
-			
-		} catch (NotFoundException e) {
-			// TODO Auto-generated catch block
-			//return  new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
-			return  new ResponseEntity<>(new Messaggio(e.getMessage()),HttpStatus.BAD_REQUEST);
-			
-		}
-	}
-*/
 	
 
 }

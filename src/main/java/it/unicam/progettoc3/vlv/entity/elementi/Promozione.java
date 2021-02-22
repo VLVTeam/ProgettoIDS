@@ -4,6 +4,7 @@ package it.unicam.progettoc3.vlv.entity.elementi;
 
 import java.util.Date;
 
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,7 +22,12 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import it.unicam.progettoc3.vlv.entity.utenti.Commerciante;
+
 @Entity
+/**
+ * classe model relativa alla promozione, si limita a fornire i getter e i setter piu' importanti
+ * per il fine ultimo del progetto.
+ */
 public class Promozione {
 	
 @Id
@@ -69,7 +75,6 @@ public String getDescrizione() {
 }
 
 
-
 public Commerciante getCommerciante() {
 	return commerciante;
 }
@@ -95,14 +100,15 @@ public void setDataFine(Date dataFine) {
 	this.dataFine = dataFine;
 }
 
-
 @JsonIgnore
 public Long getIdCommerciante(){
 	return commerciante.getId();
 }
+
 public void setID(Long iD) {
 	ID = iD;
 }
+
 public void setCommerciante(Commerciante commerciante) {
 	this.commerciante = commerciante;
 }

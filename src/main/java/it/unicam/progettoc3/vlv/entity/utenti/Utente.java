@@ -1,7 +1,5 @@
 package it.unicam.progettoc3.vlv.entity.utenti;
 
-
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,10 +19,12 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import it.unicam.progettoc3.vlv.entity.enumeratori.NomiRuoli;
 
 
-
-
-
 @Entity
+/** 
+ * la classe model Utente, e' la classe che inizializza qualsiasi utente, appunto, assegnandogli id, email e password; inoltre viene definito
+ * anche un ruolo, che sara' utile poi per creare una classe dedicata proprio ad ogni tipo di utente, a seconda di questo nomeRuolo.
+ * L'email e la password servono per l'autenticazione di ciascun utente
+ */
 public class Utente {
 
 	@Id
@@ -38,15 +38,9 @@ public class Utente {
 	@NotNull
 	private String password;
 	
-	/*
-	@NotNull
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "utente_ruolo",joinColumns = @JoinColumn(name = "utente_id"), inverseJoinColumns = @JoinColumn(name = "ruolo_id"))
-	private Set<Ruolo> ruoli = new HashSet<>();
-*/
 	@NotNull
 	@Enumerated(EnumType.STRING)
- private NomiRuoli nomeRuolo;
+	private NomiRuoli nomeRuolo;
 	
 	private boolean stato;
 	
@@ -66,7 +60,7 @@ public class Utente {
 		this.password = password;
 		this.nomeRuolo=nomeRuolo;
 		if(nomeRuolo==NomiRuoli.ROLE_COMMERCIANTE || nomeRuolo==NomiRuoli.ROLE_CORRIERE)
-		this.stato=false;
+			this.stato=false;
 		else this.stato=true;
 	}
 
@@ -94,16 +88,6 @@ public class Utente {
 		this.password = password;
 	}
 
-	/*
-	public Set<Ruolo> getRuoli() {
-		return ruoli;
-	}
-
-	public void setRuoli(Set<Ruolo> ruoli) {
-		this.ruoli = ruoli;
-	}
-
-	*/
 	public Ruolo getAssociato() {
 		
 		return associato;

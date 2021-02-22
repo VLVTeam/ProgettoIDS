@@ -22,53 +22,56 @@ import javassist.NotFoundException;
 @RestController
 @RequestMapping("/gestoreCorrieri")
 @CrossOrigin(origins = "http://localhost:4200")
+/**
+ * Questa classe definisce tutti i metodi relativi
+ * ai corrieri e, attraverso la loro invocazione, delega la loro precisa esecuzione alla classe service
+ * corrispondente.
+ */
 public class CorriereController {
 
+	// collegamento alla classe service corrispondente
 	@Autowired
 	CorriereService corriereService;
 	
 	@PreAuthorize("hasRole('AMMINISTRATORE')")
 	@PutMapping(value ="/accettaIscrizioneCorriere/{idCorriere}")
-	
+	/** metodo per cambiare lo stato dell'iscrizione di un corriere da false a true, puo' farlo solo l'amministratore, attraverso la classe 'CorriereService' */
 	public ResponseEntity<?> accettaIscrizioneCorriere(@PathVariable("idCorriere") Long idCorriere) {
 		// TODO Auto-generated method stub
 		 try {
 			corriereService.accettaIscrizioneCorriere(idCorriere);
-			//return new ResponseEntity<>("ISCRIZIONE CORRIERE ACCETTATA",HttpStatus.OK);
-			return  new ResponseEntity<>(new Messaggio("ISCRIZIONE CORRIERE ACCETTATA"),HttpStatus.OK);
+			return new ResponseEntity<>(new Messaggio("ISCRIZIONE CORRIERE ACCETTATA"),HttpStatus.OK);
 		} catch (NotFoundException e) {
 			// TODO Auto-generated catch block
-			//return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-			return  new ResponseEntity<>(new Messaggio(e.getMessage()),HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(new Messaggio(e.getMessage()), HttpStatus.BAD_REQUEST);
 		}
 	}
 	
 	
-	
 	@PreAuthorize("hasRole('AMMINISTRATORE')")
 	@GetMapping(value="/getCorrieriDaAccettare")
-	
+	/** metodo che fornisce la lista di corrieri le quali iscrizioni non sono state ancora accettate, attraverso la classe 'CorriereService' */
 	public ResponseEntity<List<Utente>> getCorrieriDaAccettare() {
 		// TODO Auto-generated method stub
 		return new ResponseEntity<List<Utente>>(corriereService.getCorrieriDaAccettare(),HttpStatus.OK);
 	}
 	
 	
-	
 	@PreAuthorize("hasRole('AMMINISTRATORE')")
 	@GetMapping(value ="/getCorriereByIdUtente/{idUtente}")
+	/** metodo che, dato un'id utente, se il ruolo dell'utente trovato corrisponde a ruolo corriere, restituisce questo commerciante, attraverso la classe 'CorriereService' */
 	public ResponseEntity<?> getCorriereByIdUtente(@PathVariable("idUtente") Long idUtente)
 	{
-		
 		
 		try{
 			return new ResponseEntity<Corriere>(corriereService.getCorriereByIdUtente(idUtente),HttpStatus.OK);
 			}catch(NotFoundException e){
-				return  new ResponseEntity<>(new Messaggio(e.getMessage()),HttpStatus.BAD_REQUEST);
-				//return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<>(new Messaggio(e.getMessage()), HttpStatus.BAD_REQUEST);
 			}catch(IllegalArgumentException e){
-				return  new ResponseEntity<>(new Messaggio(e.getMessage()),HttpStatus.BAD_REQUEST);
-				//return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<>(new Messaggio(e.getMessage()), HttpStatus.BAD_REQUEST);
 			}
+		
 	}
+	
+	
 }

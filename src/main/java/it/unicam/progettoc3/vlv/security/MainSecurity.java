@@ -17,14 +17,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import it.unicam.progettoc3.vlv.security.jtw.JwtEntryPoint;
 import it.unicam.progettoc3.vlv.security.jtw.JwtTokenFilter;
 import it.unicam.progettoc3.vlv.security.service.UserDetailsServiceImpl;
-
-@Configuration
-@EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled =  true )
 /**
  * classe dedicata alla sicurezza, estende WebSecurityConfigurerAdapter ed ha la responsabilita' di gestire le richieste provenienti
  * dai clienti. Definisce i parametri di configurazione e il servizio di autenticazione.
  */
+@Configuration
+@EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled =  true )
 public class MainSecurity extends WebSecurityConfigurerAdapter{
 
 	@Autowired
@@ -74,4 +73,5 @@ public class MainSecurity extends WebSecurityConfigurerAdapter{
 	}
 		
 		
+	
 }

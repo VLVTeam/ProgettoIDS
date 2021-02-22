@@ -16,12 +16,11 @@ import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.ExpiredJwtException;
 
 import it.unicam.progettoc3.vlv.security.entity.UtentePrincipale;
-
-@Component
 /**
  * Questa classe si occupa di creare il token jwt, ottenere le informazioni dal token jwt e verificare la validita' 
  * dello stesso token a livello sintattico.
  */
+@Component
 public class JwtProvider {
 
 	private final static  Logger logger = LoggerFactory.getLogger(JwtProvider.class);

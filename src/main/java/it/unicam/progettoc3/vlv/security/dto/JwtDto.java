@@ -19,9 +19,7 @@ public class JwtDto {
 		this.token = token;
 		this.email = email;
 		this.authorities = authorities;
-		
 	}
-	
 	public String getToken() {
 		return token;
 	}
@@ -46,6 +44,7 @@ public class JwtDto {
 	public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
 		this.authorities = authorities;
 	}
+	
 	
 
 }

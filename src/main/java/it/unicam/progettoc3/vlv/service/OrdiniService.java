@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -453,7 +455,7 @@ public class OrdiniService {
         // TODO Auto-generated method stub
  
         Utente utente = utenteRepository.findByEmail(emailCommerciante).orElseThrow(()->new  NotFoundException("commerciante non trovato"));
-        if(utente.getNomeRuolo() != NomiRuoli.ROLE_COMMERCIANTE) throw new IllegalArgumentException("utente non è commerciante");
+        if(utente.getNomeRuolo() != NomiRuoli.ROLE_COMMERCIANTE) throw new IllegalArgumentException("utente non Ã¨ commerciante");
         Commerciante commerciante = (Commerciante) utente.getAssociato(); 
         return commerciante.getOrdini();
 

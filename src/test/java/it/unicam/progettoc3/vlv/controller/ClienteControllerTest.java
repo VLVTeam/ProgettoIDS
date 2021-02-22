@@ -74,7 +74,6 @@ public class ClienteControllerTest {
 				.content(DoitTest
 						.asJsonString(new ValutazioneDto("recensione", new HashSet<ValutazioneProgettistaDto>(), 1))))
 				.andExpect(status().isBadRequest()).andExpect(jsonPath("$.messaggio").exists()).andReturn();
-
 		mvc.perform(MockMvcRequestBuilders.post("/esperto/progetto/valuta/{id_invito}", "proponente1")
 				.contentType(MediaType.APPLICATION_JSON)
 				.header(JwtTokenFilter.AUTHORIZATION_HEADER_NAME,
@@ -82,7 +81,6 @@ public class ClienteControllerTest {
 				.content(DoitTest
 						.asJsonString(new ValutazioneDto("recensione", new HashSet<ValutazioneProgettistaDto>(), 1))))
 				.andExpect(status().isBadRequest()).andExpect(jsonPath("$.messaggio").exists()).andReturn();
-
 	}
 	
 	
@@ -93,7 +91,6 @@ public class ClienteControllerTest {
 		C3Test.generateCommerciante(mvc, "commerciante1@mail.it");
 		jwtCommerciante = C3Test.getTokenAccesso(mvc, "commerciante1@mail.it", "pass");
 		C3Test.generateOrdine(mvc, jwtCommerciante);
-
 	}
 	
 	

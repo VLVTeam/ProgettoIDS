@@ -9,16 +9,15 @@ import org.springframework.stereotype.Service;
 import it.unicam.progettoc3.vlv.entity.utenti.Utente;
 import it.unicam.progettoc3.vlv.security.entity.UtentePrincipale;
 import it.unicam.progettoc3.vlv.service.UtenteService;
-
-@Service
 /**
  * questa classe implementa l'interfaccia UserDetailsService e si occupa di caricare i dati relativi all'utente passato attraverso la sua email
  */
-public class UserDetailsServiceImpl implements UserDetailsService{
+@Service
+public class UserDetailsServiceImpl   implements UserDetailsService{
 
-	// collegamento alla classe service di utente, per poter cercarlo tramite mail
 	@Autowired
 	UtenteService utenteService;
+	
 	
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {

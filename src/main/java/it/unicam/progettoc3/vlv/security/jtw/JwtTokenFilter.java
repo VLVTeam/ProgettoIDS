@@ -16,23 +16,20 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import it.unicam.progettoc3.vlv.security.service.UserDetailsServiceImpl;
-
 /**
  * Questa classe estende OncePerRequestFilter ed ha la responsabilita' di verificare la validita' del token tramite la classe JwtProvider; 
  * in caso affermativo permette la visualizzazione della risorsa altrimenti lancia un eccezione.
  */
 public class JwtTokenFilter extends OncePerRequestFilter{
+
+	
 	
 	private final static  Logger logger = LoggerFactory.getLogger(JwtTokenFilter.class);
-
-	public static final String AUTHORIZATION_HEADER_NAME = "Authorization";
-	public static final String TOKEN_BEARER_HEADER_NAME = "Bearer ";
 	
-	// collegamento alla classe provider relativa
+	
 	@Autowired
 	JwtProvider jwtProvider;
 	
-	// collegamento alla classe userDetailsService
 	@Autowired
 	UserDetailsServiceImpl userDetailsService;
 	
@@ -61,9 +58,9 @@ public class JwtTokenFilter extends OncePerRequestFilter{
 	
 	private String getToken(HttpServletRequest request)
 	{
-		String header = request.getHeader(AUTHORIZATION_HEADER_NAME);
-		if(header != null &&  header.startsWith(TOKEN_BEARER_HEADER_NAME))
-			return header.replace(TOKEN_BEARER_HEADER_NAME, "");
+		String header = request.getHeader("Authorization");
+		if(header != null &&  header.startsWith("Bearer"))
+			return header.replace("Bearer ", "");
 		
 		return null;
 	}

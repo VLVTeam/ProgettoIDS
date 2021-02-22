@@ -11,15 +11,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
-
-@Component
 /**
  * Questa classe implementa AuthenticationEntryPoint, grazie a questo puo' verificare se l'utente che ha tentato l'autenticazione
  * ha un token jwt valido. In caso negativo viene inviato l'errore 401 (NON AUTORIZZATO).
  */
+@Component
 public class JwtEntryPoint implements AuthenticationEntryPoint {
+
 	
 	private final static  Logger logger = LoggerFactory.getLogger(JwtEntryPoint.class);
+	
 	
 	@Override
 	public void commence(HttpServletRequest request, HttpServletResponse response,

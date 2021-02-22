@@ -79,9 +79,7 @@ public class Cliente extends Ruolo {
 		this.ordini = ordini;
 	}
 	
-	public Long getId() {
-		return id;
-	}
+	
 	
 
 }

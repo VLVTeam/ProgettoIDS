@@ -4,7 +4,6 @@ package it.unicam.progettoc3.vlv.entity.elementi;
 
 import java.util.Date;
 
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,7 +21,6 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import it.unicam.progettoc3.vlv.entity.utenti.Commerciante;
-
 @Entity
 /**
  * classe model relativa alla promozione, si limita a fornire i getter e i setter piu' importanti

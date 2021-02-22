@@ -1,5 +1,7 @@
 package it.unicam.progettoc3.vlv.entity.utenti;
 
+
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,6 +19,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import it.unicam.progettoc3.vlv.entity.enumeratori.NomiRuoli;
+
+
+
 
 
 @Entity

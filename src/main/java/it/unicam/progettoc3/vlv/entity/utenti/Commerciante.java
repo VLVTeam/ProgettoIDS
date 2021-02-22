@@ -103,8 +103,6 @@ public class Commerciante extends Ruolo  {
 		this.promozioni = promozioni;
 	}
 	
-	public Long getId() {
-		return id;
-	}
+	
 	
 }

@@ -29,11 +29,12 @@ import it.unicam.progettoc3.vlv.entity.utenti.Cliente;
 import it.unicam.progettoc3.vlv.entity.utenti.Commerciante;
 import it.unicam.progettoc3.vlv.entity.utenti.Corriere;
 
-@Entity
+
 /**
  * classe model relativa all'ordine, si limita a fornire i getter e i setter piu' importanti
  * per il fine ultimo del progetto.
  */
+@Entity
 public class Ordine {
 
 @Id

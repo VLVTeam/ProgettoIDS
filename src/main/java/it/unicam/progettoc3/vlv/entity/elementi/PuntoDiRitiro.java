@@ -22,12 +22,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 
-@Entity(name = "punto_di_ritiro")
-@Table(name = "punto_di_ritiro")
+
 /**
  * classe model relativa al punto di ritiro, si limita a fornire i getter e i setter piu' importanti
  * per il fine ultimo del progetto.
  */
+@Entity(name = "punto_di_ritiro")
+@Table(name = "punto_di_ritiro")
 public class PuntoDiRitiro {
 	
 	@Id

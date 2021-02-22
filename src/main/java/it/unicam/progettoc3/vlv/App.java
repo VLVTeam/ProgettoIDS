@@ -7,7 +7,6 @@ package it.unicam.progettoc3.vlv;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-/** classe strandard springboot application */
 @SpringBootApplication
 public class App {
     public String getGreeting() {
@@ -18,5 +17,4 @@ public class App {
         System.out.println(new App().getGreeting());
         SpringApplication.run(App.class, args);
     }
-    
 }

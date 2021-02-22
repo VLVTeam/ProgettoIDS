@@ -3,8 +3,6 @@ package it.unicam.progettoc3.vlv.entity.dto;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import it.unicam.progettoc3.vlv.entity.enumeratori.CategorieMerceologiche;
@@ -12,7 +10,7 @@ import it.unicam.progettoc3.vlv.entity.enumeratori.CategorieMerceologiche;
 /**
  * La classe NuovoCommerciante ha la parte piu' grezza (getter e setter) delle funzionalita' della classe Commerciante, le due permettono di istanziare
  * due oggetti quasi equivalenti per quanto riguarda gli attributi interessanti da mostrare sulla piattaforma.
- * Questa classe è stata aggiunta per permettere di restituire e/o modificare un oggetto commerciante, ma appunto solo con categoria merceologica,
+ * Questa classe Ã¨ stata aggiunta per permettere di restituire e/o modificare un oggetto commerciante, ma appunto solo con categoria merceologica,
  * indirizzo punto vendita e nome punto vendita
  */
 public class NuovoCommerciante extends NuovoUtente {
@@ -55,8 +53,8 @@ public class NuovoCommerciante extends NuovoUtente {
 	
 	public NuovoCommerciante(){}
 
-	public NuovoCommerciante(@NotNull @NotBlank @Email String email, @NotNull @NotBlank String password,
-			@NotNull @NotBlank CategorieMerceologiche categoria, @NotNull @NotBlank String indirizzo, @NotNull @NotBlank String nome){
+	public NuovoCommerciante(@NotNull   String email, @NotNull  String password,
+			@NotNull  CategorieMerceologiche categoria, @NotNull  String indirizzo, @NotNull  String nome){
 		super(email, password);
 		this.email = email;
 		this.password = password;

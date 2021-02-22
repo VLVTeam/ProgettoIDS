@@ -63,8 +63,6 @@ public class Corriere extends Ruolo  {
 		this.ordini = ordini;
 	}
 
-	public Long getId() {
-		return id;
-	}
+	
 
 }

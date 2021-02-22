@@ -12,4 +12,6 @@ import it.unicam.progettoc3.vlv.entity.utenti.Cliente;
  */
 public interface ClienteRepository extends JpaRepository<Cliente, Long> {
 
+	
+	
 }

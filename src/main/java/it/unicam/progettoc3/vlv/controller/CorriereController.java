@@ -57,7 +57,7 @@ public class CorriereController {
 	}
 	
 	
-	@PreAuthorize("hasRole('AMMINISTRATORE')")
+	//@PreAuthorize("hasRole('AMMINISTRATORE')")
 	@GetMapping(value ="/getCorriereByIdUtente/{idUtente}")
 	/** metodo che, dato un'id utente, se il ruolo dell'utente trovato corrisponde a ruolo corriere, restituisce questo commerciante, attraverso la classe 'CorriereService' */
 	public ResponseEntity<?> getCorriereByIdUtente(@PathVariable("idUtente") Long idUtente)

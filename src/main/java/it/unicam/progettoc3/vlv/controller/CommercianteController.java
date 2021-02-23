@@ -62,7 +62,7 @@ public class CommercianteController {
 	}
 	
 	
-	@PreAuthorize("hasRole('AMMINISTRATORE')")
+	//@PreAuthorize("hasRole('AMMINISTRATORE')")
 	@GetMapping(value ="/getCommercianteByIdUtente/{idUtente}")
 	/** metodo che, dato un'id utente, se il ruolo dell'utente trovato corrisponde a ruolo commerciante, restituisce questo commerciante, attraverso la classe 'CommercianteService' */
 	public ResponseEntity<?> getCommercianteByIdUtente(@PathVariable("idUtente") Long idUtente)

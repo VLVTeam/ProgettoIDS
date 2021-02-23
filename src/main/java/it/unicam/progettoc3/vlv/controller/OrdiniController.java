@@ -32,6 +32,7 @@ import it.unicam.progettoc3.vlv.entity.elementi.Ordine;
 import it.unicam.progettoc3.vlv.entity.elementi.PuntoDiRitiro;
 import it.unicam.progettoc3.vlv.entity.utenti.Cliente;
 import it.unicam.progettoc3.vlv.entity.utenti.Commerciante;
+
 import it.unicam.progettoc3.vlv.service.OrdiniService;
 import it.unicam.progettoc3.vlv.utils.Messaggio;
 import javassist.NotFoundException;
@@ -328,7 +329,7 @@ public class OrdiniController {
 	}
 	
 	
-	@PreAuthorize("hasRole('CORRIERE')")
+	//@PreAuthorize("hasRole('CORRIERE')")
 	@GetMapping(value = "/getCommercianteById/{idCommerciante}")
 	/** metodo per ricercare un commerciante attraverso il suo id ed eventualmente restituirlo in maniera dettagliata */
 	public ResponseEntity<?> getCommercianteById(@PathVariable("idCommerciante")Long idCommerciante)
@@ -342,7 +343,7 @@ public class OrdiniController {
 	}
 	
 	
-	@PreAuthorize("hasRole('CORRIERE')")
+	//@PreAuthorize("hasRole('CORRIERE')")
 	@GetMapping(value = "/getPuntoDiRitiroById/{idPuntoDiRitiro}")
 	/** metodo per ricercare un punto di ritiro attraverso il suo id ed eventualmente restituirlo in maniera dettagliata */
 	public ResponseEntity<?> getPuntoDiRitiroById(@PathVariable("idPuntoDiRitiro")Long idPuntoDiRitiro)
@@ -356,7 +357,7 @@ public class OrdiniController {
 	}
 	
 	
-	@PreAuthorize("hasRole('CORRIERE')")
+	//@PreAuthorize("hasRole('CORRIERE')")
 	@GetMapping(value = "/getClienteById/{idCliente}")
 	/** metodo per ricercare un cliente attraverso il suo id ed eventualmente restituirlo in maniera dettagliata */
 	public ResponseEntity<?> getClienteById(@PathVariable("idCliente")Long idCliente)
@@ -368,6 +369,8 @@ public class OrdiniController {
 			return new ResponseEntity<>(new Messaggio(e.getMessage()), HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	
 	
 	
 }

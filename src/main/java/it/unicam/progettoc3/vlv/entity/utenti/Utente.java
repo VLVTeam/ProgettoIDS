@@ -50,6 +50,7 @@ public class Utente {
 	private boolean stato;
 	
 	
+	@JsonIgnore
 	@NotNull
 	@JsonManagedReference
 	@OneToOne(cascade= CascadeType.ALL , fetch = FetchType.EAGER )
@@ -84,7 +85,8 @@ public class Utente {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
+	
+	@JsonIgnore
 	public String getPassword() {
 		return password;
 	}
@@ -93,6 +95,7 @@ public class Utente {
 		this.password = password;
 	}
 
+	@JsonIgnore
 	public Ruolo getAssociato() {
 		
 		return associato;
@@ -118,7 +121,7 @@ public class Utente {
 	public void setStato(boolean stato) {
 		this.stato = stato;
 	}
-
+	@JsonIgnore
 	public NomiRuoli getNomeRuolo() {
 		return nomeRuolo;
 	}

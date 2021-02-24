@@ -231,15 +231,16 @@ public class OrdiniController {
 	 *  stabilita anche la data prevista per il ritiro dell'ordine dal commerciante e
 	 *  cambiato lo stato dell'ordine in 'IN_RITIRO', tutto tramite la classe 'OrdiniService'
 	 */
-	public ResponseEntity<?> setPresaInCaricoOrdine(@PathVariable("idOrdine") Long idOrdine,@PathVariable("dataPrevistaRitiro")   String dataPrevistaRitiro ,   Authentication authentication) {
+	public ResponseEntity<?> setPresaInCaricoOrdine(@PathVariable("idOrdine") Long idOrdine,@PathVariable("dataPrevistaRitiro")   String  dataPrevistaRitiro ,   Authentication authentication) {
 		
 	// TODO Auto-generated method stub
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		String emailCorriere = authentication.getName();
 		
 		try {
-			// trasforma la stringa fornita in data relativa
+			//trasforma la stringa fornita in data relativa
 			Date data = format.parse(dataPrevistaRitiro);
+			
 			ordiniService.setPresaInCaricoOrdine(idOrdine,  data,emailCorriere);
 			return new ResponseEntity<>(new Messaggio("ORDINE PRESO IN CARICO"), HttpStatus.OK);
 		} catch (IllegalArgumentException e) {
@@ -247,9 +248,10 @@ public class OrdiniController {
 			return new ResponseEntity<>(new Messaggio(e.getMessage()), HttpStatus.BAD_REQUEST);
 		}catch(NotFoundException e){
 			return new ResponseEntity<>(new Messaggio(e.getMessage()), HttpStatus.BAD_REQUEST);
+		
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
-			return new ResponseEntity<>(new Messaggio("CONTROLLARE DATA"), HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(new Messaggio("CONTROLLARE DATA"), HttpStatus.BAD_REQUEST);
 		}
 	}
 

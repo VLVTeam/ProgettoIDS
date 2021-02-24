@@ -2,7 +2,7 @@
 Progetto Centro Commerciale in Centro (C3)
 
 
-##Introduzione
+## Introduzione
 
 Il progetto si rivolge ai centri abitati medi della provincia italiana dove le attività commerciali del centro soffrono la concorrenza di grossi centri commerciali situati nelle periferie. Si vuole risolvere tramite questo progetto la scomodità relativa al trasporto della merce una volta acquistata in centro e la difficoltà della ricerca dei punti vendita in relazione a specifiche categorie merceologiche. Il progetto si pone dunque come obiettivo quello di fornire un supporto tecnologico per rendere l’esperienza degli acquisti in centro più facile e interessante. Si identificano in particolare i seguenti chiari attori:
 
@@ -15,7 +15,7 @@ Il progetto si rivolge ai centri abitati medi della provincia italiana dove le a
 ⦁	Amministratore: Esiste un solo amministratore della piattaforma, questo si occupa di accettare le iscrizioni di commercianti e corrieri, ma anche di aggiungere e rimuovere i punti vendita relativi ai commercianti.
 
 
-Funzionalità implementate
+## Funzionalità implementate
 
 La piattaforma consiste nelle seguenti funzionalità principali:
 ⦁	Inizializzazione ordine: Il commerciante seleziona il cliente e il punto di ritiro relativo all'ordine, tra una lista di oggetti già presenti nel database. se il punto di ritiro non viene selezionato, questo corrisponde al domicilio del cliente. L'ordine viene salvato e caricato nel database.
@@ -36,20 +36,23 @@ La piattaforma consiste nelle seguenti funzionalità principali:
 ⦁	Per garantire la sicurezza nell'autenticazione alla piattaforma, è stato implementato un package apposito che contiene il meccanismo dei JWT o Java Web Token: ad ogni richiesta di autenticazione relativa a diversi utenti viene generato e firmato il token dal server. Questo token verrà utilizzato e incapsulato nell' header delle richieste di autenticazione successive da parte degli stessi utenti.
 
 
-Tecnologie utilizzate
+## Tecnologie utilizzate
 
 ⦁	Lato backend: spring boot con relative librerie, Java Web Token, JUnit, mock.
+
 ⦁	Lato frontend: angular.
+
 Per quanto riguarda la gestione del database è stato utilizzato MySql, e il database utilizzato è un db remoto fornito da DigitalOcean. Per testare le chiamate REST è stato utilizzato Postman.
 
 
-Conclusione
+## Conclusione
 
 Questo progetto è in una fase ancora matura di vita, può venire ancora esteso e possono venire aggiunte nuove funzionalità. Si dovrebbe effettuare un refactoring sia del codice backend che di quello frontend, si potrebbero aggiungere e migliorare alcuni test e si potrebbe creare una versione mobile.
 
 
-Link utili:
+## Link utili:
 
 Codice frontend: https://github.com/VLVTeam/FrontEndIDS
+
 VPP: https://github.com/VLVTeam/UML
 

@@ -2,12 +2,16 @@
 Progetto Centro Commerciale in Centro (C3)
 
 
-Introduzione
+##Introduzione
 
 Il progetto si rivolge ai centri abitati medi della provincia italiana dove le attività commerciali del centro soffrono la concorrenza di grossi centri commerciali situati nelle periferie. Si vuole risolvere tramite questo progetto la scomodità relativa al trasporto della merce una volta acquistata in centro e la difficoltà della ricerca dei punti vendita in relazione a specifiche categorie merceologiche. Il progetto si pone dunque come obiettivo quello di fornire un supporto tecnologico per rendere l’esperienza degli acquisti in centro più facile e interessante. Si identificano in particolare i seguenti chiari attori:
+
 ⦁	Commerciante: vende la merce fisicamente presso il suo punto vendita e definisce il punto di ritiro della stessa comunicando contestualmente al cliente la merce acquistata e il codice per il ritiro. Si registra sulla piattaforma, ma prima di poter accedere, la sua iscrizione deve venire accettata dall'amministratore. Può lanciare vendite promozionali sui prodotti. In sostanza può usare la piattaforma per promuovere la propria attività al fine di poter vendere la sua merce più facilmente.
+
 ⦁	Cliente: ritira la merce dai punti di prelievo (se questa non viene spedita direttamente presso il suo domicilio). Può ricercare i punti vendita dei commercianti. Può ricercare e magari filtrare le promozioni. Viene costantemente informato sullo stato degli ordini che sono legati appunto al cliente. Anche il cliente si registra sulla piattaforma e può subito accedere, senza dover aspettare che la sua iscrizione venga accettata.
+
 ⦁	Corriere: Si registra sulla piattaforma, ma prima di poter accedere, la sua iscrizione deve venire accettata dall'amministratore. Si rende disponibile a effettuare il trasporto della merce: - Prende in carico un ordine libero. - Preleva la merce dai punti vendita. - Rilascia la merce presso i punti di prelievo (che nel caso dei residenti in centro può essere la loro abitazione).
+
 ⦁	Amministratore: Esiste un solo amministratore della piattaforma, questo si occupa di accettare le iscrizioni di commercianti e corrieri, ma anche di aggiungere e rimuovere i punti vendita relativi ai commercianti.
 
 
